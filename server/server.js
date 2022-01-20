@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
     res.send('Server is Live')
 })
 
-app.use('/Users', UsersRouter)
+app.use('/users', UsersRouter)
 
 
 
