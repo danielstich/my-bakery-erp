@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 @mixin titles {
     font-size: 2rem;
     font-weight: 700;
@@ -52,4 +54,14 @@
 
 @mixin padding-input {
     padding: 0 0.5rem;
+}
+
+@mixin padding-button {
+    padding: 0 0.5rem;
+}
+
+@mixin tablet {
+    @media (min-width: $tablet-size) {
+        @content;
+    }
 }

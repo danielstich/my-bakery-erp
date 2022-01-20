@@ -6,7 +6,7 @@ export default function InputField({ name, label, type, extraClasses, value, pla
         <div className='Input'>
             <label className='Input__Label' htmlFor={name}>{label}</label>
             <input 
-                className={'Input__Field' + extraClasses}
+                className={'Input__Field ' + extraClasses}
                 type={type}
                 name={name}
                 id={name}

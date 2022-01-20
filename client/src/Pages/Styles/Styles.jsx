@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import Button from '../../Components/Button/Button'
 import InputField from '../../Components/Input/InputField'
 import './Styles.scss'
 
@@ -39,10 +40,16 @@ export default class Styles extends Component {
             name='firstName'
             label='First Name'
             type='text'
-            extraClasses=''
+            extraClasses='Input__Field--bottom'
             value={this.state.value}
             placeholder='First Name'
             onChangeHandler={this.onChangeHandler}
+          />
+          <Button
+            type={'button'}
+            label={'Add a Recipe'}
+            onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
+            extraClasses='Button--Bottom'
           />
       </div>
     )
