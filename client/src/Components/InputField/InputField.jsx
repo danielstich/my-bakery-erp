@@ -13,7 +13,7 @@ export default function InputField({ name, label, type, extraClasses, value, pla
                 value={value}
                 placeholder={placeholder}
                 onChange={onChangeHandler}
-                autocomplete="off"
+                autoComplete="off"
             />
         </div>
     );

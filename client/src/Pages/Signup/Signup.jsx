@@ -1,20 +1,40 @@
 import { Component } from 'react';
+import axios from 'axios'
 import InputField from '../../Components/InputField/InputField'
 import Button from '../../Components/Button/Button';
 import './Signup.scss'
 
 export default class Signup extends Component {
     state = {
-        name: '',
-        email: '',
-        password: ''
+        user: {
+            name: '',
+            email: '',
+            password: ''
+        },
+        isSuccess: false,
+        isError: false,
+        errorMessage: ''
     }
 
     onChangeHandler = (event) => {
         const { name, value} = event.target;
         const newState = {...this.state}
-        newState[name] = value;
+        newState.user[name] = value;
         this.setState(newState)
+    }
+
+    submitForm = () => {
+        axios.post('http://localhost:8080/users/signup', this.state.user)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error.response.data.error)
+                this.setState({
+                    isError: true,
+                    errorMessage: error.response.data.error
+                })
+            })
     }
 
     render() {
@@ -52,15 +72,15 @@ export default class Signup extends Component {
                                 type={'button'}
                                 label={'Cancel'}
                                 onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
-                                extraClasses='Button--Bottom Button--Cancel'/>
+                                extraClasses='Button--Cancel'/>
                             <Button
                                 type={'button'}
                                 label={'Sign Up'}
-                                onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
-                                extraClasses='Button--Bottom '/>
+                                onClickHandler={this.submitForm}
+                                extraClasses=''/>
                         </div>
-                        
                     </form>
+                    {this.state.isError && <p className='Signup__Error'>{this.state.errorMessage}</p>}
                 </div>
             </div>
         );
