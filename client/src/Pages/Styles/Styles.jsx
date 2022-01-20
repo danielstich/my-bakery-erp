@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import Button from '../../Components/Button/Button'
-import InputField from '../../Components/Input/InputField'
+import InputField from '../../Components/InputField/InputField'
 import './Styles.scss'
 
 export default class Styles extends Component {
