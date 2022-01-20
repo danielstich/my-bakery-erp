@@ -2,46 +2,4 @@
 @use '../../Styles/variables' as *;
 
 .Home {
-    &__Title {
-        @include titles;
-        @include spacing-reset;
-        border: 1px solid grey;
-    }
-
-    &__Subtitle {
-        @include subtitles;
-        @include flex-center;
-    }
-
-    &__Label {
-        @include labels;
-    }
-
-    &__Text {
-        @include body;
-        color: $text-color-1;
-
-        &--Light {
-            color: $text-color-2;
-        }
-    }
-
-    &__Box {
-        height: 200px;
-        width: 400px;
-        display: inline-block;
-
-        &--1 {
-            background-color: $background-color-1;
-        }
-        &--2 {
-            background-color: $error-color;
-        }
-        &--3 {
-            background-color: $background-color-3;
-        }
-        &--4 {
-            background-color: $success-color;
-        }
-    }
 }
