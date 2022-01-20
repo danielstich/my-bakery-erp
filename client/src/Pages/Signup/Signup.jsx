@@ -3,6 +3,7 @@ import axios from 'axios'
 import InputField from '../../Components/InputField/InputField'
 import Button from '../../Components/Button/Button';
 import './Signup.scss'
+import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
 
 export default class Signup extends Component {
     state = {
@@ -42,6 +43,7 @@ export default class Signup extends Component {
         return (
             <div className='Signup'>
                 <div className='Signup__Container'>
+                    <img className='Signup__Close-Icon' onClick={() => console.log('close')} src={closeIcon} alt="" />
                     <h1 className='Signup__Title'>Sign Up Today!</h1>
                     <form className='Signup__Form'>
                         <InputField 
@@ -72,7 +74,7 @@ export default class Signup extends Component {
                             <Button
                                 type={'button'}
                                 label={'Cancel'}
-                                onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
+                                onClickHandler={()=>{}}
                                 extraClasses='Button--Cancel'/>
                             <Button
                                 type={'button'}
