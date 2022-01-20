@@ -29,8 +29,11 @@
         border-radius: 50%;
         // border: 2px solid black;
         background-color: $error-color;
-
         cursor: pointer;
+
+        &:hover {
+            background-color: $error-color-2;
+        }
     }
 
     &__Btn-Container {

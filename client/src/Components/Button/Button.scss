@@ -23,7 +23,7 @@
     &--Cancel {
         background-color: $error-color;
         &:hover {
-            background-color: darkred;
+            background-color: $error-color-2;
         }
     }
 }

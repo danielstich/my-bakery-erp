@@ -4,6 +4,7 @@ import InputField from '../../Components/InputField/InputField'
 import Button from '../../Components/Button/Button';
 import './Signup.scss'
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
+import { Redirect } from 'react-router-dom';
 
 export default class Signup extends Component {
     state = {
@@ -25,6 +26,10 @@ export default class Signup extends Component {
         this.setState(newState)
     }
 
+    closeForm = () => {
+        this.setState({isSuccess: true})
+    }
+
     submitForm = () => {
         axios.post('http://localhost:8080/users/signup', this.state.user)
             .then(response => {
@@ -40,10 +45,11 @@ export default class Signup extends Component {
     }
 
     render() {
+        if (this.state.isSuccess) return <Redirect to={{pathname:'/', alert:''}} />
         return (
             <div className='Signup'>
                 <div className='Signup__Container'>
-                    <img className='Signup__Close-Icon' onClick={() => console.log('close')} src={closeIcon} alt="" />
+                    <img className='Signup__Close-Icon' onClick={this.closeForm} src={closeIcon} alt="" />
                     <h1 className='Signup__Title'>Sign Up Today!</h1>
                     <form className='Signup__Form'>
                         <InputField 
@@ -74,7 +80,7 @@ export default class Signup extends Component {
                             <Button
                                 type={'button'}
                                 label={'Cancel'}
-                                onClickHandler={()=>{}}
+                                onClickHandler={this.closeForm}
                                 extraClasses='Button--Cancel'/>
                             <Button
                                 type={'button'}
