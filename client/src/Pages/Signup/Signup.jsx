@@ -47,11 +47,19 @@ export default class Signup extends Component {
                             value={this.state['password']}
                             placeholder='Please Enter Your Password'
                             onChangeHandler={this.onChangeHandler}/>
-                        <Button
-                            type={'button'}
-                            label={'Sign Up'}
-                            onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
-                            extraClasses='Button--Bottom'/>
+                        <div className='Signup__Btn-Container'>
+                            <Button
+                                type={'button'}
+                                label={'Cancel'}
+                                onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
+                                extraClasses='Button--Bottom Button--Cancel'/>
+                            <Button
+                                type={'button'}
+                                label={'Sign Up'}
+                                onClickHandler={(event) => {event.preventDefault(); console.log('added')}}
+                                extraClasses='Button--Bottom '/>
+                        </div>
+                        
                     </form>
                 </div>
             </div>

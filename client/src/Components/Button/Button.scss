@@ -20,11 +20,10 @@
         margin-bottom: 1rem;
     }
 
-    &__Container {
-        @include padding;
-    }
-
-    @include tablet {
-        width: fit-content;
+    &--Cancel {
+        background-color: $error-color;
+        &:hover {
+            background-color: darkred;
+        }
     }
 }

@@ -8,11 +8,19 @@
     top: 0;
     background-color: $background-color-3;
     @include flex-center;
+
     &__Container {
         background-color: white;
         @include padding;
         border-radius: 4px;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+            rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    }
+
+    &__Btn-Container {
+        display: flex;
+        gap: 1rem;
+        @include padding;
     }
 
     &__Title {
