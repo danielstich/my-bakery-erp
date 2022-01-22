@@ -1,40 +1,62 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const knex = require('knex')(require('../knexfile').development);
 
 require('dotenv').config();
-const saltRounds = process.env.SALT_ROUNDS;
+const saltRounds = parseInt(process.env.SALT_ROUNDS);
 const SECRET = process.env.JWT_SECRET;
-
-const users = {}
 
 exports.signup = async (req, res) => {
     const {name, email, password} = req.body;
     if (!email || !password) return res.status(400).json({error: 'Email or Password is missing'});
-    if (users[email]) return res.status(400).json({error: 'User already Exists'});
-
-    const hash = await bcrypt.hash(password, saltRounds);
+    const password_hash = await bcrypt.hash(password, saltRounds);
 
     const newUser ={
         name,
         email,
-        hash
+        password_hash
     }
-    users[email] = newUser;
 
-    res.status(201).send({success: 'User was created'})
+    knex('users')
+        .insert(newUser)
+        .then(data => {
+            return res.status(200).json(data)
+        })
+        .catch(error => {
+            console.log(error.code)
+            return res.status(400).json({error: 'Error creating user: ' + error.sqlMessage})
+        })
 }
 
 exports.login = async (req, res) => {
     const {email, password} = req.body;
     if (!email || !password) return res.status(400).json({error: 'Email or Password is missing'});
-    if (!users[email]) return res.status(400).json({error: 'User not found'})
-    const hash = users[email].hash;
-    const passwordIsValid = await bcrypt.compare(password, hash);
+    
 
-    if (!passwordIsValid) return res.status(401).json({error: 'Password is invalid'});
+    knex.select('name', 'email', 'password_hash', 'id')
+        .from('users')
+        .where({email: email})
+        .then(async data => {
+            const user = {...data[0]}
+            if (!user.email) throw {status: 400, error: 'User not found'};
+            
+            const hash = user.password_hash;
+            const passwordIsValid = await bcrypt.compare(password, hash);
+            if (!passwordIsValid) throw {status: 401, error: 'Password is invalid'} ;
+            
+            
+            delete user.password_hash;
+            const token = jwt.sign(user, SECRET);
+        
+            res.status(200).json({success: 'Login Succesful', token: token, user: user})
+        })
+        .catch(error => {
+            if (error.status) {
+                return res.status(error.status).json({error: error.error});
+            }
+            res.status(400).json({error: 'Error retrieving user: ' + error.sqlMessage})
+        })
 
-    const user = users[email];
-    const token = jwt.sign(user, SECRET);
 
-    res.status(200).json({success: 'Login Succesful', token: token})
+
 }
