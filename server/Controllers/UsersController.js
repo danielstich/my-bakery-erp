@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
+const saltRounds = process.env.SALT_ROUNDS;
+const SECRET = process.env.JWT_SECRET;
 
 const users = {}
 
@@ -10,7 +12,7 @@ exports.signup = async (req, res) => {
     if (!email || !password) return res.status(400).json({error: 'Email or Password is missing'});
     if (users[email]) return res.status(400).json({error: 'User already Exists'});
 
-    const hash = await bcrypt.hash(password, 12);
+    const hash = await bcrypt.hash(password, saltRounds);
 
     const newUser ={
         name,
@@ -32,7 +34,7 @@ exports.login = async (req, res) => {
     if (!passwordIsValid) return res.status(401).json({error: 'Password is invalid'});
 
     const user = users[email];
-    const token = jwt.sign(user, process.env.JWT_SECRET);
+    const token = jwt.sign(user, SECRET);
 
     res.status(200).json({success: 'Login Succesful', token: token})
 }
