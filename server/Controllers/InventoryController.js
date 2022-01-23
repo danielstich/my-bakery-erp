@@ -1,16 +1,11 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const knex = require('knex')(require('../knexfile').development);
-
 require('dotenv').config();
-const saltRounds = parseInt(process.env.SALT_ROUNDS);
-const SECRET = process.env.JWT_SECRET;
 
 exports.addItem = (req, res) => {
     const newInventory = req.body;
     newInventory.user_id = req.user.id;
 
-    knex('inventory').insert(req.body)
+    knex('inventory').insert(newInventory)
         .then(data => {
             console.log(data);
             res.status(201).json({success: "This item was added succesfully"})
@@ -47,7 +42,7 @@ exports.getAllItems = (req, res) => {
         .then(data => {
             console.log(data);
             const items = [...data]
-            res.status(200).json({success: "This items were found succesfully", items: items})
+            res.status(200).json({success: "These items were found succesfully", items: items})
         })
         .catch(error => {
             console.log(error.sqlMessage)
@@ -68,7 +63,7 @@ exports.editItem = (req, res) => {
         })
         .catch(error => {
             console.log(error.sqlMessage)
-            res.status(400).json({error: "Could not find items: " + error.sqlMessage})
+            res.status(400).json({error: "Could not find item: " + error.sqlMessage})
         })
 }
 
