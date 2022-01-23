@@ -1,6 +1,8 @@
 const express = require('express');
-const cors = require('cors')
-const UsersRouter = require('./Routers/Users')
+const cors = require('cors');
+const UsersRouter = require('./Routers/UsersRouter');
+const InventoryRouter = require('./Routers/InventoryRouter');
+const IngredientsRouter = require('./Routers/IngredientsRouter');
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/users', UsersRouter)
+app.use('/inventory', InventoryRouter)
+app.use('/ingredients', IngredientsRouter)
 
 
 
