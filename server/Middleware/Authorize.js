@@ -3,12 +3,13 @@ require('dotenv').config();
 const SECRET = process.env.JWT_SECRET;
 
 exports.authorize = (req, res, next) => {
+    if (!req.headers.authorization) return res.status(401).json({error: 'Not Authorized'});
     const token = req.headers.authorization.split(' ')[1];
 
     jwt.verify(token, SECRET, (error, decoded) => {
         if (error) {
             console.log(error)
-            return res.status(401).send({error: 'Not Authorized'})
+            return res.status(401).json({error: 'Not Authorized'})
         }
         // console.log(decoded);
         req.user = decoded;
