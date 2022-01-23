@@ -16,7 +16,7 @@ exports.addIngredient = (req, res) => {
         })
 }
 
-exports.getIngredient = (req, res) => {
+exports.getIngredients = (req, res) => {
     const ingredientID = req.params.id;
     const userID = req.user.id;
     knex.select('id', 'name', 'description', 'amount', 'unit').from('ingredients').where({id: ingredientID, user_id: userID})
