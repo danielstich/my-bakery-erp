@@ -2,14 +2,13 @@ import { Component } from 'react';
 import axios from 'axios'
 import InputField from '../../Components/InputField/InputField'
 import Button from '../../Components/Button/Button';
-import './Signup.scss'
+import './Login.scss'
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
 import { Redirect } from 'react-router-dom';
 
-export default class Signup extends Component {
+export default class Login extends Component {
     state = {
         user: {
-            name: '',
             email: '',
             password: ''
         },
@@ -31,10 +30,13 @@ export default class Signup extends Component {
     }
 
     submitForm = () => {
-        axios.post('http://localhost:8080/users/signup', this.state.user)
+        axios.post('http://localhost:8080/users/login', this.state.user)
             .then(response => {
                 console.log(response)
-                this.setState({isSuccess: true})
+                sessionStorage.setItem('token', response.data.token)
+                this.setState({
+                    isSuccess: true
+                })
             })
             .catch(error => {
                 console.log(error.response.data.error)
@@ -48,19 +50,11 @@ export default class Signup extends Component {
     render() {
         if (this.state.isSuccess) return <Redirect to={{pathname:'/', alert:''}} />
         return (
-            <div className='Signup'>
-                <div className='Signup__Container'>
-                    <img className='Signup__Close-Icon' onClick={this.closeForm} src={closeIcon} alt="" />
-                    <h1 className='Signup__Title'>Sign Up Today!</h1>
-                    <form className='Signup__Form'>
-                        <InputField 
-                            name='name'
-                            label='Full Name'
-                            type='text'
-                            extraClasses=''
-                            value={this.state['name']}
-                            placeholder='Please Enter Your Name'
-                            onChangeHandler={this.onChangeHandler}/>
+            <div className='Login'>
+                <div className='Login__Container'>
+                    <img className='Login__Close-Icon' onClick={this.closeForm} src={closeIcon} alt="" />
+                    <h1 className='Login__Title'>Login</h1>
+                    <form className='Login__Form'>
                         <InputField 
                             name='email'
                             label='Email'
@@ -77,7 +71,7 @@ export default class Signup extends Component {
                             value={this.state['password']}
                             placeholder='Please Enter Your Password'
                             onChangeHandler={this.onChangeHandler}/>
-                        <div className='Signup__Btn-Container'>
+                        <div className='Login__Btn-Container'>
                             <Button
                                 type={'button'}
                                 label={'Cancel'}
@@ -85,7 +79,7 @@ export default class Signup extends Component {
                                 extraClasses='Button--Cancel'/>
                             <Button
                                 type={'button'}
-                                label={'Sign Up'}
+                                label={'Login'}
                                 onClickHandler={this.submitForm}
                                 extraClasses=''/>
                         </div>
