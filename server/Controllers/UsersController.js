@@ -56,7 +56,36 @@ exports.login = async (req, res) => {
             }
             res.status(400).json({error: 'Error retrieving user: ' + error.sqlMessage})
         })
+}
 
+exports.deleteUser = async (req, res) => {
+    console.log(req.user)
 
+    const email = req.user.email;
+    const password = req.body.password;
 
+    knex.select('email', 'password_hash')
+        .from('users')
+        .where({email: email})
+        .then(async data => {
+            const user = {...data[0]}
+            if (!user.email) throw {status: 400, error: 'User not found'};
+            
+            const hash = user.password_hash;
+            const passwordIsValid = await bcrypt.compare(password, hash);
+            if (!passwordIsValid) throw {status: 401, error: 'Password is invalid'} ;
+            
+            return knex('users').where({email: email}).del();
+        })
+        .then(data => {
+            console.log(data);
+            if (!data) throw {status: 400, error: 'User not delete'}
+            res.status(200).json({success: 'User Deleted'})
+        })
+        .catch(error => {
+            if (error.status) {
+                return res.status(error.status).json({error: error.error});
+            }
+            res.status(400).json({error: 'Error deleting user: ' + error.sqlMessage})
+        })
 }
