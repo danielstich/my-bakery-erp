@@ -71,9 +71,10 @@ exports.deleteItem = (req, res) => {
         .then(data => {
             console.log(data)
             if (data === 0) throw {status: 400, error: "Unable to delete"}
+            res.status(200).json({success: "This item was deleted"})
         })
         .catch(error => {
             if(error.status) return res.status(error.status).json({error: error.error})
-            return res.status(400).json({error: "Could not delete item: " + error.sqlMessage})
+            res.status(400).json({error: "Could not delete item: " + error.sqlMessage})
         })
 }
