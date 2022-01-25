@@ -10,14 +10,13 @@ function App() {
 
     <Router>
       <div className="App">
-        My Bakery App
-      <Switch>
-        <Redirect from='/' exact to='home' />
-        <Route path='/home' exact component={Home}/>
-        <Route path='/Styles' exact component={Styles}/>
-        <Route path='/Signup' exact component={Signup}/>
-        <Route path='/Login' exact component={Login} />
-      </Switch>
+        <Switch>
+          <Redirect from='/' exact to='home' />
+          <Route path='/home' exact component={Home}/>
+          <Route path='/Styles' exact component={Styles}/>
+          <Route path='/Signup' exact component={Signup}/>
+          <Route path='/Login' exact component={Login} />
+        </Switch>
       </div>
 
     </Router>
