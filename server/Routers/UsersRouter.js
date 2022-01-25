@@ -9,6 +9,6 @@ router.use('/delete', authorize);
 router.post('/signup', signup);
 router.post('/login', login);
 router.delete('/delete', deleteUser);
-router.get('/', getUser);
+router.get('/', authorize, getUser);
 
 module.exports = router;

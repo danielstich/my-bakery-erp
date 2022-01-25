@@ -42,7 +42,7 @@ export default class Header extends Component {
                     </div>
                 </div>
                 <div className={this.state.navClass}>
-                    <Link className='Header__Link' onClick={() => window.location.reload()} to='/home'>Home</Link>
+                    <Link className='Header__Link' to='/home'>Home</Link>
                     <Link className='Header__Link' to='/Signup' >Sign Up</Link>
                     <Link className='Header__Link' to='/Login' >Login</Link>
                 </div>

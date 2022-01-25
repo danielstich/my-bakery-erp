@@ -2,6 +2,8 @@
 @use '../../Styles/variables' as *;
 
 .Header {
+    position: relative;
+    z-index: 2;
     @include tablet {
         padding-top: 0.25rem;
     }
@@ -89,6 +91,10 @@
 
         &--logo {
             padding: 0;
+            border-top: none;
+            &:active {
+                background-color: transparent;
+            }
         }
 
         @include tablet {
@@ -97,6 +103,10 @@
 
             &:active {
                 background-color: transparent;
+            }
+
+            &:hover {
+                font-weight: 500;
             }
         }
     }

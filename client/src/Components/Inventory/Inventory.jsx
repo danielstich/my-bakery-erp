@@ -5,7 +5,8 @@ import addIcon from '../../Assets/Icons/add.svg';
 
 export default class Inventory extends Component {
     state = {
-        inventory: []
+        inventory: [],
+        currentItem: {}
     }
 
     componentDidMount() {
@@ -52,49 +53,42 @@ export default class Inventory extends Component {
                     qty: '500',
                     unit: 'grams',
                     id: '7'
-                },
-                {
-                    name: 'chocolate',
-                    qty: '500',
-                    unit: 'grams',
-                    id: '7'
-                },
-                {
-                    name: 'chocolate',
-                    qty: '500',
-                    unit: 'grams',
-                    id: '7'
-                },
-                {
-                    name: 'chocolate',
-                    qty: '500',
-                    unit: 'grams',
-                    id: '7'
-                },{
-                    name: 'chocolate',
-                    qty: '500',
-                    unit: 'grams',
-                    id: '7'
-                },
-            ]
+                }
+            ],
+            currentItem: {
+                name: 'flour',
+                qty: '5',
+                unit: 'kg',
+                id: '1'
+            }
         })
+    }
+
+    selectItem = (item) => {
+        this.setState({currentItem: item})
     }
 
     render() {
         return (
             <div className='Inventory'>
-                <h1 className='Inventory__Title'>Inventory</h1>
+                <div className='Inventory__Header'>
+                    <h1 className='Inventory__Title'>Inventory</h1>
+                    <img onClick={() => console.log('add')} className='Inventory__Add-Icon' src={addIcon} alt="add button" />
+                </div>
                 <div className='Inventory__Items'>
                     {this.state.inventory.map(item => {
                         return (
-                            <div className='Item'>
+                            <div key={item.id} onClick={() => this.selectItem(item)} className='Item'>
                                 <h3 className='Item__Title'>{item.name}</h3>
                                 <p className='Item__Body'>{item.qty} {item.unit}</p>
                                 <img className='Item__Icon' src={editIcon} alt="" />
                             </div>
                         )
                     })}
-                <img className='Inventory__Add-Icon' src={addIcon} alt="add button" />
+                </div>
+                <div className='Inventory__Item'>
+                    <p>Item: {this.state.currentItem.name}</p>
+                    <p>Quantity: {this.state.currentItem.qty} {this.state.currentItem.unit}</p>
                 </div>
             </div>
         );
