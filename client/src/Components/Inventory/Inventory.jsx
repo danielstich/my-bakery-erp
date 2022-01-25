@@ -10,7 +10,13 @@ export default class Inventory extends Component {
         isLoading: true,
         inventory: [],
         currentItem: {},
-        showModal: false
+        showModal: false,
+        API_URL: process.env.REACT_APP_API_URL,
+        options: {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('token')}`
+            }
+        }
     }
 
     componentDidMount() {
@@ -18,13 +24,8 @@ export default class Inventory extends Component {
     }
 
     getInventory = () => {
-        const API_URL = process.env.REACT_APP_API_URL;
-        const token = sessionStorage.getItem('token');
-        const options = {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-        }
+        const { API_URL, options } = this.state;
+
         axios.get(`${API_URL}/inventory`, options).then(response => {
             this.setState({
                 isLoading: false,
@@ -36,40 +37,33 @@ export default class Inventory extends Component {
         })
     }
 
+    responseHandler = promise => {
+        promise
+            .then(response => {
+                console.log(response);
+                this.getInventory();
+                this.hideModal();
+                return;
+            })
+            .catch(error => {
+                console.log(error.message, error.response.data);
+                return;
+            })
+    }
+
     submitItem = (event, id) => {
         event.preventDefault();
-        const API_URL = process.env.REACT_APP_API_URL;
-        const token = sessionStorage.getItem('token');
-        const options = {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-        }
+        const { API_URL, options } = this.state;
+        const promise = id ? 
+            axios.put(`${API_URL}/inventory/${id}`, this.state.currentItem, options) :
+            axios.post(`${API_URL}/inventory`, this.state.currentItem, options);
+        this.responseHandler(promise);
+    }
 
-        if (this.state.isEdit && id) {
-            axios.put(`${API_URL}/inventory/${id}`, this.state.currentItem, options)
-                .then(response => {
-                    console.log(response);
-                    this.getInventory();
-                    return;
-                })
-                .catch(error => {
-                    console.log(error.message);
-                    this.hideModal();
-                    return;
-                })
-        } else {
-            axios.post(`${API_URL}/inventory`, this.state.currentItem, options)
-                .then(response => {
-                    console.log(response);
-                    this.getInventory();
-                })
-                .catch(error => {
-                    console.log(error.message);
-                    this.hideModal();
-                    return;
-                })
-        }
+    deleteItem = (id) => {
+        const { API_URL, options } = this.state;
+        const promise = axios.delete(`${API_URL}/inventory/${id}`, options);
+        this.responseHandler(promise);
     }
 
     selectItem = (item) => {
@@ -105,16 +99,19 @@ export default class Inventory extends Component {
     }
 
     render() {
-        return (
-            <div className='Inventory'>
-                <div className='Inventory__Modal'>
-                    {this.state.showModal ? (
-                        <EditItem 
+        const editAddModal = (
+            <EditItem 
                         onChangeHandler={this.onChangeHandler} 
                         onSubmitHandler={this.submitItem} 
                         hideModal={this.hideModal} 
+                        deleteItem={this.deleteItem}
                         item={this.state.currentItem}/>
-                    ): <></>}
+        )
+
+        return (
+            <div className='Inventory'>
+                <div className='Inventory__Modal'>
+                    {this.state.showModal ? editAddModal : <></>}
                 </div>
                 
                 <div className='Inventory__Header'>
@@ -133,13 +130,7 @@ export default class Inventory extends Component {
                     })}
                 </div>
                 <div className='Inventory__Item'>
-                    {this.state.showModal ? 
-                        <EditItem 
-                        onChangeHandler={this.onChangeHandler} 
-                        onSubmitHandler={this.submitItem} 
-                        hideModal={this.hideModal} 
-                        item={this.state.currentItem}/> 
-                        : 
+                    {this.state.showModal ? editAddModal : 
                         (!this.state.isLoading &&
                         <div><p>Item: {this.state.currentItem.name}</p>
                         <p>Quantity: {this.state.currentItem.qty} {this.state.currentItem.unit}</p></div>)

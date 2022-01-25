@@ -2,15 +2,19 @@ import React from 'react';
 import './EditItem.scss';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
-import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
+import closeIcon from '../../Assets/Icons/close_black_24dp.svg';
+import deleteIcon from '../../Assets/Icons/delete.svg';
 
 export default function EditItem(props) {
-    const { onChangeHandler, onSubmitHandler, hideModal, item } = props;
+    const { onChangeHandler, onSubmitHandler, deleteItem, hideModal, item } = props;
+
+    const submitItem = item.id ? ((event) => {onSubmitHandler(event, item.id)}) : onSubmitHandler;
+    
     return (
         <div className='EditItem'>
             <form 
                 className='EditItem__Form' 
-                onSubmit={item ? (event) => {onSubmitHandler(event, item.id)} : onSubmitHandler}>
+                onSubmit={submitItem}>
                 <InputField 
                     label='Item Name'
                     type='text'
@@ -22,7 +26,7 @@ export default function EditItem(props) {
                     />
                 <InputField 
                     label='Quantity'
-                    type='text'
+                    type='number'
                     name='qty'
                     id='qty'
                     value={item ? item.qty : ''}
@@ -39,7 +43,10 @@ export default function EditItem(props) {
                     onChangeHandler={onChangeHandler}
                     />
                 <Button extraClasses='Button--EditItem' type="submit" label={item.id ? 'Edit Item' : 'Add Item'}/>
-                <img className='EditItem__Icon' onClick={hideModal} src={closeIcon} alt="" />      
+                <div className='EditItem__Icon-Container'>
+                    <img className='EditItem__Icon' onClick={hideModal} src={closeIcon} alt="" />      
+                    {item.id ? <img className='EditItem__Icon' src={deleteIcon} alt='delete' onClick={() => deleteItem(item.id)} /> : <></>}
+                </div>
             </form>
         </div>
     )

@@ -13,9 +13,10 @@
 
     @include desktop {
         width: auto;
-        height: auto;
+        height: 100%;
         position: relative;
         background-color: transparent;
+        align-items: flex-start;
     }
 
     &__Form {
@@ -29,9 +30,15 @@
         gap: 0.5rem;
 
         @include desktop {
+            margin-top: 5rem;
             box-shadow: none;
             background-color: transparent;
         }
+    }
+
+    &__Icon-Container {
+        display: flex;
+        justify-content: space-evenly;
     }
 
     &__Icon {

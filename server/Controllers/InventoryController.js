@@ -5,6 +5,10 @@ exports.addItem = (req, res) => {
     const newInventory = req.body;
     newInventory.user_id = req.user.id;
 
+    if (!newInventory.name || !newInventory.qty || !newInventory.unit) {
+        return res.status(400).json({error: 'Missing Fields'})
+    }
+
     knex('inventory').insert(newInventory)
         .then(data => {
             res.status(201).json({success: "This item was added succesfully"})
@@ -50,6 +54,10 @@ exports.editItem = (req, res) => {
     const userID = req.user.id;
     const itemID = req.params.id;
     const update = req.body;
+
+    if (!update.name || !update.qty || !update.unit) {
+        return res.status(400).json({error: 'Missing Fields'})
+    }
 
     knex('inventory').where({user_id: userID, id: itemID}).update(update)
         .then(data => {
