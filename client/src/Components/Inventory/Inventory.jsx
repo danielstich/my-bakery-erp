@@ -5,82 +5,71 @@ import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
 import EditItem from '../EditItem/EditItem';
 
-const API_URL = process.env.REACT_APP_API_URL;
-
 export default class Inventory extends Component {
     state = {
+        isLoading: true,
         inventory: [],
         currentItem: {},
         showModal: false
     }
 
     componentDidMount() {
-        console.log(`${API_URL}/inventory`)
+        this.getInventory();
+    }
+
+    getInventory = () => {
+        const API_URL = process.env.REACT_APP_API_URL;
         const token = sessionStorage.getItem('token');
         const options = {
             headers: {
               Authorization: `Bearer ${token}`
             }
         }
-        axios.get(`${API_URL}/inventory`).then(response => {
-            console.log(response.data)
+        axios.get(`${API_URL}/inventory`, options).then(response => {
+            this.setState({
+                isLoading: false,
+                inventory: response.data.items,
+                currentItem: {...response.data.items[0]}
+            })
         }).catch(error => {
             console.log(error.message)
         })
+    }
 
-        const inventory = [
-            {
-                name: 'flour',
-                qty: '5',
-                unit: 'kg',
-                id: '1'
-            },
-            {
-                name: 'sugar',
-                qty: '2.5',
-                unit: 'kg',
-                id: '2'
-            },
-            {
-                name: 'milk',
-                qty: '10',
-                unit: 'gallons',
-                id: '3'
-            },
-            {
-                name: 'eggs',
-                qty: '10',
-                unit: 'dozen',
-                id: '4'
-            },
-            {
-                name: 'vanilla',
-                qty: '100',
-                unit: 'grams',
-                id: '5'
-            },
-            {
-                name: 'cinnamon',
-                qty: '50',
-                unit: 'grams',
-                id: '6'
-            },
-            {
-                name: 'chocolate',
-                qty: '500',
-                unit: 'grams',
-                id: '7'
+    submitItem = (event, id) => {
+        event.preventDefault();
+        const API_URL = process.env.REACT_APP_API_URL;
+        const token = sessionStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: `Bearer ${token}`
             }
-        ];
-        inventory.sort((a, b) => {
-            if (a.name < b.name) return -1;
-            if (a.name > b.name) return 1;
-            return 0;
-        })
-        this.setState({
-            inventory: inventory,
-            currentItem: inventory[0]
-        })
+        }
+
+        if (this.state.isEdit && id) {
+            axios.put(`${API_URL}/inventory/${id}`, this.state.currentItem, options)
+                .then(response => {
+                    console.log(response);
+                    this.getInventory();
+                    return;
+                })
+                .catch(error => {
+                    console.log(error.message);
+                    this.hideModal();
+                    return;
+                })
+        } else {
+            axios.post(`${API_URL}/inventory`, this.state.currentItem, options)
+                .then(response => {
+                    console.log(response);
+                    this.getInventory();
+                })
+                .catch(error => {
+                    console.log(error.message);
+                    this.hideModal();
+                    return;
+                })
+        }
     }
 
     selectItem = (item) => {
@@ -88,15 +77,10 @@ export default class Inventory extends Component {
     }
 
     onChangeHandler = (event) => {
-        const { name, value} = event.target;
-        const item = this.state.currentItem;
+        const { name, value } = event.target;
+        const item = {...this.state.currentItem};
         item[name] = value;
-        this.setState(item)
-    }
-
-    onSubmitHandler = (event, id) => {
-        event.preventDefault();
-        this.hideModal();
+        this.setState({currentItem :item})
     }
 
     hideModal = () => {
@@ -127,7 +111,7 @@ export default class Inventory extends Component {
                     {this.state.showModal ? (
                         <EditItem 
                         onChangeHandler={this.onChangeHandler} 
-                        onSubmitHandler={this.onSubmitHandler} 
+                        onSubmitHandler={this.submitItem} 
                         hideModal={this.hideModal} 
                         item={this.state.currentItem}/>
                     ): <></>}
@@ -138,7 +122,7 @@ export default class Inventory extends Component {
                     <img onClick={this.addModal} className='Inventory__Add-Icon' src={addIcon} alt="add button" />
                 </div>
                 <div className='Inventory__Items'>
-                    {this.state.inventory.map(item => {
+                    {!this.state.isLoading && this.state.inventory.map(item => {
                         return (
                             <div key={item.id} onClick={() => this.selectItem(item)} className='Item'>
                                 <h3 className='Item__Title'>{item.name}</h3>
@@ -149,14 +133,17 @@ export default class Inventory extends Component {
                     })}
                 </div>
                 <div className='Inventory__Item'>
-                    {this.state.showModal ? <EditItem 
+                    {this.state.showModal ? 
+                        <EditItem 
                         onChangeHandler={this.onChangeHandler} 
-                        onSubmitHandler={this.onSubmitHandler} 
+                        onSubmitHandler={this.submitItem} 
                         hideModal={this.hideModal} 
-                        item={this.state.currentItem}/> : 
+                        item={this.state.currentItem}/> 
+                        : 
+                        (!this.state.isLoading &&
                         <div><p>Item: {this.state.currentItem.name}</p>
-                        <p>Quantity: {this.state.currentItem.qty} {this.state.currentItem.unit}</p></div>
-                        }
+                        <p>Quantity: {this.state.currentItem.qty} {this.state.currentItem.unit}</p></div>)
+                    }
                     
                 </div>
             </div>

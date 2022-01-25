@@ -38,7 +38,7 @@ export default function EditItem(props) {
                     placeholder='Unit'
                     onChangeHandler={onChangeHandler}
                     />
-                <Button extraClasses='Button--EditItem' type="submit" label="Add"/>
+                <Button extraClasses='Button--EditItem' type="submit" label={item.id ? 'Edit Item' : 'Add Item'}/>
                 <img className='EditItem__Icon' onClick={hideModal} src={closeIcon} alt="" />      
             </form>
         </div>

@@ -1,5 +1,5 @@
 import './Home.scss'
-import { Link, Redirect, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { Component } from 'react';
 import Inventory from '../../Components/Inventory/Inventory';
 import axios from 'axios';
@@ -24,7 +24,6 @@ export default class Home extends Component {
         }
       })
       .then(response => {
-        console.log(response);
         this.setState({
           isLoggedIn: true,
           isVerifying: false,
@@ -49,7 +48,7 @@ export default class Home extends Component {
           <div className='Home__Switch'>
             {this.state.isLoggedIn && 
             <Switch>
-              <Route path={url + '/Inventory'} component={Inventory} />
+              <Route path={url + '/inventory'} component={Inventory} />
               {/* <Route path={url + '/Batches'} Component={Batches} /> */}
               {/* <Route path={url + '/Recipes'} Component={Recipes} /> */} 
             </Switch>

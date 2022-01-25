@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use('/', authorize);
 
-router.post('/add', addItem);
+router.post('/', addItem);
 router.get('/:id', getItem);
 router.get('/', getAllItems);
 router.put('/:id', editItem);
