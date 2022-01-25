@@ -29,15 +29,14 @@ export default class Header extends Component {
         return (
             <div className='Header'>
                 <div className='Header__Container'>
-                    <Link className='Header__Link Header__Link--logo' onClick={() => window.location.reload()} to='/home'><img className='Header__Icon Header__Icon--logo' src={crescent} alt="crescent logo" /></Link>
-                    <Link className='Header__Link Header__Link--logo' onClick={() => window.location.reload()} to='/home'><h1 className='Header__Title'>My Bakery</h1></Link>
+                    <Link className='Header__Link Header__Link--logo' to='/home'><img className='Header__Icon Header__Icon--logo' src={crescent} alt="crescent logo" /></Link>
+                    <Link className='Header__Link Header__Link--logo' to='/home'><h1 className='Header__Title'>My Bakery</h1></Link>
                     <img 
                         onClick={this.state.navIsVisible ? this.hideMenu : this.showMenu} 
                         className='Header__Icon Header__Icon--menu' 
                         src={this.state.navIsVisible ? openMenu : menu} 
                         alt="crescent logo" />
                     <div className='Header__Nav Header__Nav--tablet'>
-                        <Link className='Header__Link' onClick={() => window.location.reload()} to='/home'>Home</Link>
                         <Link className='Header__Link' to='/Signup' >Sign Up</Link>
                         <Link className='Header__Link' to='/Login' >Login</Link>
                     </div>

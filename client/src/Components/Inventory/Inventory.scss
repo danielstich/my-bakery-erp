@@ -1,0 +1,8 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Inventory {
+    &__Title {
+        @include titles;
+    }
+}

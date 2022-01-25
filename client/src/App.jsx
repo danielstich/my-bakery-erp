@@ -12,7 +12,7 @@ function App() {
       <div className="App">
         <Switch>
           <Redirect from='/' exact to='home' />
-          <Route path='/home' exact component={Home}/>
+          <Route path='/home' component={Home}/>
           <Route path='/Styles' exact component={Styles}/>
           <Route path='/Signup' exact component={Signup}/>
           <Route path='/Login' exact component={Login} />

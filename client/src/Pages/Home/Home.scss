@@ -2,4 +2,19 @@
 @use '../../Styles/variables' as *;
 
 .Home {
+    min-height: 100vh;
+
+    @include desktop {
+        width: $desktop-size;
+        margin: 0 auto;
+    }
+    &__Container {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    &__Switch {
+        flex-grow: 1;
+        padding-left: 0.25rem;
+    }
 }
