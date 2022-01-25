@@ -12,6 +12,12 @@
         flex-direction: row;
     }
 
+    &__Modal {
+        @include desktop {
+            display: none;
+        }
+    }
+
     &__Header {
         display: flex;
         justify-content: space-between;
