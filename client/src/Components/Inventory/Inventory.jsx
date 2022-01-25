@@ -1,8 +1,11 @@
 import { Component } from 'react';
+import axios from 'axios';
 import './Inventory.scss';
 import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
 import EditItem from '../EditItem/EditItem';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default class Inventory extends Component {
     state = {
@@ -12,6 +15,19 @@ export default class Inventory extends Component {
     }
 
     componentDidMount() {
+        console.log(`${API_URL}/inventory`)
+        const token = sessionStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+        }
+        axios.get(`${API_URL}/inventory`).then(response => {
+            console.log(response.data)
+        }).catch(error => {
+            console.log(error.message)
+        })
+
         const inventory = [
             {
                 name: 'flour',

@@ -16,10 +16,11 @@ export default class Home extends Component {
 
   componentDidMount = () => {
     const token = sessionStorage.getItem('token');
+
     if (token) {
       axios.get('http://localhost:8080/users', {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`
+          Authorization: `Bearer ${token}`
         }
       })
       .then(response => {
@@ -46,13 +47,15 @@ export default class Home extends Component {
         <Header />
         <div className='Home__Container'>
           <div className='Home__Switch'>
+            {this.state.isLoggedIn && 
             <Switch>
               <Route path={url + '/Inventory'} component={Inventory} />
               {/* <Route path={url + '/Batches'} Component={Batches} /> */}
               {/* <Route path={url + '/Recipes'} Component={Recipes} /> */} 
             </Switch>
+            }
           </div>
-          <Toolbar />
+          {this.state.isLoggedIn && <Toolbar />}
         </div>
       </div>
     )

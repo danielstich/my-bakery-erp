@@ -11,7 +11,6 @@ exports.authorize = (req, res, next) => {
             console.log(error)
             return res.status(401).json({error: 'Not Authorized'})
         }
-        // console.log(decoded);
         req.user = decoded;
         next();
     })

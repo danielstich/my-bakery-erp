@@ -91,6 +91,5 @@ exports.deleteUser = async (req, res) => {
 }
 
 exports.getUser = (req, res) => {
-    console.log(req.user)
     res.json(req.user)
 }
