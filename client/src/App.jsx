@@ -1,5 +1,5 @@
 import './App.scss';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import Home from './Pages/Home/Home';
 import Styles from './Pages/Styles/Styles';
 import Signup from './Pages/Signup/Signup';
@@ -10,13 +10,13 @@ function App() {
 
     <Router>
       <div className="App">
-        My Bakery App
-      <Switch>
-        <Route path='/' exact component={Home}/>
-        <Route path='/Styles' exact component={Styles}/>
-        <Route path='/Signup' exact component={Signup}/>
-        <Route path='/Login' exact component={Login} />
-      </Switch>
+        <Switch>
+          <Redirect from='/' exact to='home' />
+          <Route path='/home' component={Home}/>
+          <Route path='/Styles' exact component={Styles}/>
+          <Route path='/Signup' exact component={Signup}/>
+          <Route path='/Login' exact component={Login} />
+        </Switch>
       </div>
 
     </Router>

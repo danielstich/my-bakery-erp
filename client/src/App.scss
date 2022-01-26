@@ -1,3 +1,7 @@
+@use './Styles/mixins' as *;
+@use './Styles/variables' as *;
+
 .App {
     position: relative;
+    background-color: $background-color-4;
 }

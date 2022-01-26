@@ -4,7 +4,7 @@
 .Input {
     display: flex;
     flex-direction: column;
-    @include padding;
+    width: 100%;
 
     &__Label {
         @include labels;

@@ -1,0 +1,51 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Toolbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: $success-color;
+    display: flex;
+    padding: 1rem 0;
+
+    @include tablet {
+        position: relative;
+        left: 0.25rem;
+        top: 10rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: auto;
+        height: 100%;
+        padding: 1rem;
+        gap: 1.5rem;
+        background-color: $success-color;
+        border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+            rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    }
+
+    &__Link {
+        @include body;
+        text-decoration: none;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        width: 25%;
+        text-align: center;
+
+        @include tablet {
+            align-items: center;
+            width: auto;
+        }
+    }
+
+    &__Icon {
+        height: 2.5rem;
+
+        @include tablet {
+            height: auto;
+            width: 2rem;
+        }
+    }
+}

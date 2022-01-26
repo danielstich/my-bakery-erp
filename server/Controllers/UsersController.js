@@ -89,3 +89,7 @@ exports.deleteUser = async (req, res) => {
             res.status(400).json({error: 'Error deleting user: ' + error.sqlMessage})
         })
 }
+
+exports.getUser = (req, res) => {
+    res.json(req.user)
+}
