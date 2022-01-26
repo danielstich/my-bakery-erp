@@ -13,7 +13,7 @@ export default function Toolbar() {
                 <img className='Toolbar__Icon' src={inventoryIcon} alt="clipboard icon" />
                 Inventory
             </Link>
-            <Link className='Toolbar__Link' to='/home/inventory'>
+            <Link className='Toolbar__Link' to='/home/recipes'>
                 <img className='Toolbar__Icon' src={recipesIcon} alt="clipboard icon" />
                 Recipes
             </Link>

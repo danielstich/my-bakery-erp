@@ -2,6 +2,7 @@ import './Home.scss'
 import { Switch, Route } from 'react-router-dom'
 import { Component } from 'react';
 import Inventory from '../../Components/Inventory/Inventory';
+import Recipes from '../../Components/Recipe/Recipes';
 import axios from 'axios';
 
 import Header from '../../Components/Header/Header';
@@ -49,8 +50,8 @@ export default class Home extends Component {
             {this.state.isLoggedIn && 
             <Switch>
               <Route path={url + '/inventory'} component={Inventory} />
-              {/* <Route path={url + '/Batches'} Component={Batches} /> */}
-              {/* <Route path={url + '/Recipes'} Component={Recipes} /> */} 
+              <Route path={url + '/recipes'} component={Recipes} /> 
+              {/* <Route path={url + '/Batches'} component={Batches} /> */}
             </Switch>
             }
           </div>
