@@ -24,19 +24,47 @@ export default class Recipes extends Component {
 
     getRecipes = () => {
         const { API_URL, options } = this.state;
+
         axios.get(`${API_URL}/recipes`, options)
             .then(response => {
                 this.setState({
                     recipes: response.data.recipes,
-                    currentRecipe: response.data.recipes[0] || {},
+                    currentRecipe: {...response.data.recipes[0]} || {},
                     isLoading: false
                 })
+            }).catch(error => {
+                console.log(error.message)
             })
-
     }
 
-    selectRecipe = (recipe) => {
-        this.setState({recipe: recipe})
+    responseHandler = promise => {
+        promise
+            .then(response => {
+                console.log(response);
+                this.getRecipes();
+                this.hideModal();
+                return;
+            })
+            .catch(error => {
+                console.log(error.message, error.response.data);
+                return;
+            })
+    }
+
+    submitRecipe = (event, id) => {
+        event.preventDefault();
+        const { API_URL, options } = this.state;
+
+        const promise = id ? 
+            axios.put(`${API_URL}/recipes/${id}`, this.state.currentRecipe, options) :
+            axios.post(`${API_URL}/recipes`, this.state.currentRecipe, options);
+        this.responseHandler(promise);
+    }
+
+    deleteRecipe = (id) => {
+        const { API_URL, options } = this.state;
+        const promise = axios.delete(`${API_URL}/recipes/${id}`, options);
+        this.responseHandler(promise);
     }
 
     onChangeHandler = (event) => {
@@ -44,6 +72,10 @@ export default class Recipes extends Component {
         const recipe = {...this.state.currentRecipe};
         recipe[name] = value;
         this.setState({currentRecipe :recipe})
+    }
+    
+    selectRecipe = (recipe) => {
+        this.setState({recipe: recipe})
     }
 
     hideModal = () => {
