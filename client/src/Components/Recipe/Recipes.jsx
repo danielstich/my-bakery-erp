@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Recipes.scss';
 import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
+import RecipeModal from '../RecipeModal/RecipeModal';
 
 export default class Recipes extends Component {
     state = {
@@ -75,7 +76,7 @@ export default class Recipes extends Component {
     }
     
     selectRecipe = (recipe) => {
-        this.setState({recipe: recipe})
+        this.setState({currentRecipe: recipe})
     }
 
     hideModal = () => {
@@ -99,19 +100,19 @@ export default class Recipes extends Component {
     }
   
     render() {
-        // const editAddModal = (
-        //     <EditItem 
-        //                 onChangeHandler={this.onChangeHandler} 
-        //                 onSubmitHandler={this.submitItem} 
-        //                 hideModal={this.hideModal} 
-        //                 deleteItem={this.deleteItem}
-        //                 item={this.state.currentItem}/>
-        // )
+        const recipeModal = (
+            <RecipeModal 
+                        onChangeHandler={this.onChangeHandler} 
+                        onSubmitHandler={this.submitRecipe} 
+                        hideModal={this.hideModal} 
+                        deleteRecipe={this.deleteRecipe}
+                        recipe={this.state.currentRecipe}/>
+        )
 
         return (
             <div className='Recipes'>
                 <div className='Recipes__Modal'>
-
+                    {this.state.showModal ? recipeModal : <></>}
                 </div>
 
                 <div className='Recipes__Header'>
@@ -130,6 +131,14 @@ export default class Recipes extends Component {
                             </div>
                         )
                     })}
+                </div>
+                <div className='Recipes__Item'>
+                    {this.state.showModal ? recipeModal : 
+                        (!this.state.isLoading &&
+                        <div><p>Recipe: {this.state.currentRecipe.name}</p>
+                        <p>Description: {this.state.currentRecipe.description}</p></div>)
+                    }
+                    
                 </div>
             </div>
         )
