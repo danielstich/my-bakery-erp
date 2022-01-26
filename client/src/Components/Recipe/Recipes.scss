@@ -37,7 +37,7 @@
     &__List {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 1rem;
 
         @include desktop {
             width: 50%;
@@ -77,9 +77,10 @@
     align-items: center;
     gap: 0.5rem;
     border: 1px grey dashed;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 0.75rem;
     cursor: pointer;
+    background-color: $background-color-4;
 
     &:last-child {
         margin-bottom: 8rem;
