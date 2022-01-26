@@ -1,0 +1,111 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Recipes {
+    @include padding;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    @include desktop {
+        flex-direction: row;
+    }
+
+    &__Modal {
+        @include desktop {
+            display: none;
+        }
+    }
+
+    &__Header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+
+        @include desktop {
+            width: 100%;
+        }
+    }
+
+    &__Title {
+        @include subtitles;
+        margin: 0;
+    }
+
+    &__List {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    &__Item {
+        display: none;
+
+        @include desktop {
+            display: block;
+            width: 50%;
+            padding-left: 0.75rem;
+        }
+    }
+
+    &__Add-Icon {
+        width: 3rem;
+        height: 3rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
+    }
+}
+
+.Recipe {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px grey dashed;
+    border-radius: 10px;
+    padding: 0.75rem;
+    cursor: pointer;
+    background-color: $background-color-4;
+
+    &:last-child {
+        margin-bottom: 8rem;
+    }
+
+    &:hover {
+        background-color: $active-state;
+    }
+
+    &__Label-Container {
+    }
+
+    &__Title {
+        @include body;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    &__Body {
+        @include body;
+        margin: 0;
+    }
+
+    &__Icon {
+        height: 1.5rem;
+        margin-left: auto;
+    }
+}

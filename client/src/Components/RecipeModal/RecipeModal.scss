@@ -1,0 +1,50 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Recipe-Modal {
+    background-color: rgba($color: white, $alpha: 0.85);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    @include flex-center;
+
+    @include desktop {
+        width: auto;
+        height: 100%;
+        position: relative;
+        background-color: transparent;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+
+    &__Form {
+        padding: 1rem;
+        border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+            rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        background-color: $background-color-5;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 90%;
+        height: 90%;
+
+        @include desktop {
+            box-shadow: none;
+            width: auto;
+            height: auto;
+        }
+    }
+
+    &__Icon-Container {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    &__Icon {
+        width: 2rem;
+    }
+}

@@ -6,10 +6,13 @@ const router = express.Router();
 
 router.use('/', authorize);
 
-router.post('/', addItem);
-router.get('/:id', getItem);
-router.get('/', getAllItems);
-router.put('/:id', editItem);
-router.delete('/:id', deleteItem);
+router.route('/')
+    .get(getAllItems)
+    .post(addItem)
+
+router.route('/:id')
+    .get(getItem)
+    .put(editItem)
+    .delete(deleteItem)
 
 module.exports = router
