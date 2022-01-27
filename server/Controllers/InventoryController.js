@@ -37,6 +37,6 @@ exports.editItem = (req, res) => {
 
 exports.deleteItem = (req, res) => {
     const selection = {id: req.params.id, user_id: req.user.id};
-    knex('inventory').where(selection).del();
+    const promise = knex('inventory').where(selection).del();
     deleteItemHandler(res, promise, 'item');
 }
