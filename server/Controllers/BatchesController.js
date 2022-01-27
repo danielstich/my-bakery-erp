@@ -15,7 +15,7 @@ exports.getBatch = (req, res) => {
 }
 
 // add new batch
-exports.addBatch = async (req, res) => {
+exports.addBatch = (req, res) => {
     // get promises for inventory and ingredients
     const ingredientsPromise = knex('ingredients').where({recipe_id: req.body.recipe_id, user_id: req.user.id});
     const inventoryPromise = knex('inventory').where({user_id: req.user.id});
@@ -39,6 +39,7 @@ exports.addBatch = async (req, res) => {
         // start knex transaction for adding batch, adding ingredients used, updating inventory
         return knex.transaction(trx => {
             return knex('batches').transacting(trx).insert(req.body, 'id')
+            // adding ingredients to used ingredients table
             .then(ids => {
                 ingredients.forEach(ingredient => ingredient.batch_id = ids[0])
                 return knex('ingredients_used').insert(ingredients).transacting(trx);
@@ -56,12 +57,11 @@ exports.addBatch = async (req, res) => {
             .then(trx.commit)
             .catch(error => {
                 trx.rollback(error);
-                throw error;
             })
     
         })
         .then(() => {
-            // success
+            // if success, send status and message
             res.status(200).json({success: 'Batch Added'})
         })
         .catch(error => {
@@ -70,8 +70,9 @@ exports.addBatch = async (req, res) => {
         })
     })
     .catch(error => {
-        if(error.status) return res.status(error.status).json({error: error.error})
-        res.status(400).json({error: `Could not add batch: ${error.sqlMessage}`})
+        if (error.checkObject) return res.status(error.status).json({error: checkObject});
+        if (error.status) return res.status(error.status).json({error: error.error});
+        res.status(400).json({error: `Could not add batch: ${error.sqlMessage}`});
     })
 }
 
