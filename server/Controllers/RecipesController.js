@@ -1,86 +1,39 @@
 const knex = require('knex')(require('../knexfile').development);
+const { getItemHandler, getAllItemsHandler, addItemHandler, editItemHandler, deleteItemHandler } = require('./ResponseHandler');
 
 exports.getAllRecipes = (req, res) => {
-    const userID = req.user.id;
-
-    knex.select('id', 'name', 'description').from('recipes').where({user_id: userID})
-        .then(data => {
-            const recipes = [...data];
-            res.status(200).json({success: "These recipes were found succesfully", recipes: recipes});
-        })
-        .catch(error => {
-            console.log(error.sqlMessage);
-            res.status(400).json({error: "Could not find recipes: " + error.sqlMessage})
-        })
+    const promise = knex.select('id', 'name', 'description').from('recipes').where({user_id: req.user.id});
+    getAllItemsHandler(res, promise, 'recipes');
 }
 
 exports.getRecipe = (req, res) => {
-    const userID = req.user.id;
-    const recipeID = req.params.id;
-
-    knex.select('id', 'name', 'description').from('recipes').where({user_id: userID, id: recipeID})
-        .then(data => {
-            const recipe = {...data[0]};
-            if (!data.length) throw {status: 400, error: "Could not find recipe"};
-            res.status(200).json({success: "This recipe was found succesfully", recipe: recipe});
-        })
-        .catch(error => {
-            if (error.status) {
-                return res.status(error.status).json({error: error.error});
-            }
-            res.status(400).json({error: "Could not find recipes: " + error.sqlMessage})
-        })
+    const selection = {id: req.params.id, user_id: req.user.id};
+    const promise = knex.select('id', 'name', 'description').from('recipes').where(selection);
+    getItemHandler(res, promise, 'recipe');
 }
 
 exports.addRecipe = (req, res) => {
-    const userID = req.user.id;
     const newRecipe = req.body;
-    newRecipe.user_id = userID;
+    newRecipe.user_id = req.user.id;
 
-    if (!newRecipe.name) {
-        return res.status(400).json({error: 'Missing Name'})
-    }
-
-    knex('recipes').insert(newRecipe)
-    .then(data => {
-        res.status(201).json({success: "This recipe was added succesfully"})
-    })
-    .catch(error => { 
-        res.status(400).json({error: "Could not add recipe: " + error.sqlMessage})
-    })
+    if (!newRecipe.name) return res.status(400).json({error: 'Missing Name'});
+    
+    const promise = knex('recipes').insert(newRecipe);
+    addItemHandler(res, promise, 'recipe')
 }
 
 exports.editRecipe = (req, res) => {
-    const userID = req.user.id;
-    const recipeID = req.params.id;
+    const selection = {id: req.params.id, user_id: req.user.id};
     const update = req.body;
 
-    if (!update.name) {
-        return res.status(400).json({error: 'Missing Fields'})
-    }
+    if (!update.name) return res.status(400).json({error: 'Missing Name'});
 
-    knex('recipes').where({user_id: userID, id: recipeID}).update(update)
-    .then(data => {
-        if (!data) throw {status: 400, error: "Could not update recipe"};
-        res.status(200).json({success: "This recipe was updated"})
-    })
-    .catch(error => {
-        console.log(error.sqlMessage)
-        res.status(400).json({error: "Could not find recipe: " + error.sqlMessage})
-    })
+    const promise = knex('recipes').where(selection).update(update);
+    editItemHandler(res, promise, 'recipe');
 }
 
 exports.deleteRecipe = (req, res) => {
-    const userID = req.user.id;
-    const recipeID = req.params.id;
-
-    knex('recipes').where({user_id: userID, id: recipeID}).del()
-        .then(data => {
-            if (data === 0) throw {status: 400, error: "Unable to delete"}
-            res.status(200).json({success: "This recipe was deleted"})
-        })
-        .catch(error => {
-            if(error.status) return res.status(error.status).json({error: error.error})
-            res.status(400).json({error: "Could not delete recipe: " + error.sqlMessage})
-        })
+    const selection = {id: req.params.id, user_id: req.user.id};
+    const promise = knex('recipes').where(selection).del();
+    deleteItemHandler(res, promise, 'recipe');
 }
