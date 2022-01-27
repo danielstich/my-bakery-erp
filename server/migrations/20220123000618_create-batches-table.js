@@ -5,8 +5,8 @@
 exports.up = function(knex) {
     return knex.schema.createTable('batches', table => {
         table.increments('id').primary();
-        table.date('Date').notNullable();
-        table.integer('Qty').notNullable();
+        table.date('date').notNullable();
+        table.integer('qty').notNullable();
         table.string('name').notNullable();
         table
             .integer('recipe_id')

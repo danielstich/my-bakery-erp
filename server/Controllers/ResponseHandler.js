@@ -1,3 +1,17 @@
+exports.getAllItemsHandler = (res, promise, itemType) => {
+    promise
+        .then(data => {
+            const items = [...data];
+            const responseObject = {}
+            responseObject.success = `These ${itemType} were found succesfully`;
+            responseObject[itemType] = items;
+            res.status(200).json(responseObject);
+        })
+        .catch(error => {
+            res.status(400).json({error: `Could not find ${itemType}: ${error.sqlMessage}`})
+        })
+}
+
 exports.getItemHandler = (res, promise, itemType) => {
     promise
         .then(data => {
@@ -10,20 +24,6 @@ exports.getItemHandler = (res, promise, itemType) => {
         })
         .catch(error => {
             if (error.status) return res.status(error.status).json({error: error.error});
-            res.status(400).json({error: `Could not find ${itemType}: ${error.sqlMessage}`})
-        })
-}
-
-exports.getAllItemsHandler = (res, promise, itemType) => {
-    promise
-        .then(data => {
-            const items = [...data];
-            const responseObject = {}
-            responseObject.success = `These ${itemType} were found succesfully`;
-            responseObject[itemType] = items;
-            res.status(200).json(responseObject);
-        })
-        .catch(error => {
             res.status(400).json({error: `Could not find ${itemType}: ${error.sqlMessage}`})
         })
 }
