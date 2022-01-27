@@ -4,6 +4,7 @@ const UsersRouter = require('./Routers/UsersRouter');
 const InventoryRouter = require('./Routers/InventoryRouter');
 const IngredientsRouter = require('./Routers/IngredientsRouter');
 const RecipesRouter = require('./Routers/RecipesRouter');
+const BatchesRouter = require('./Routers/BatchesRouter');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use('/users', UsersRouter)
 app.use('/inventory', InventoryRouter)
 app.use('/ingredients', IngredientsRouter)
 app.use('/recipes', RecipesRouter);
+app.use('/batches', BatchesRouter);
 
 
 

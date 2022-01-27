@@ -1,20 +1,18 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
 exports.up = function(knex) {
-    return knex.schema.createTable('batches', table => {
+    return knex.schema.createTable('ingredients_used', table => {
         table.increments('id').primary();
-        table.date('date').notNullable();
-        table.integer('qty').notNullable();
         table.string('name').notNullable();
+        table.string('description').notNullable();
+        table.float('amount').notNullable();
+        table.string('unit').notNullable();
         table
-            .integer('recipe_id')
+            .integer('batch_id')
             .unsigned()
             .notNullable()
             .references('id')
-            .inTable('recipes')
-            .onUpdate('CASCADE');
+            .inTable('batches')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE')
         table
             .integer('user_id')
             .unsigned()
@@ -31,5 +29,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.dropTable('batches');
+    return knex.schema.dropTable('ingredients_used');
 };
