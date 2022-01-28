@@ -3,18 +3,16 @@
 
 .Recipe-Modal {
     background-color: rgba($color: white, $alpha: 0.85);
-    width: 100vw;
-    height: 100vh;
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
     z-index: 3;
     @include flex-center;
 
     @include desktop {
-        width: auto;
-        height: 100%;
-        position: relative;
+        top: 0.25rem;
+        right: -25rem;
+        position: absolute;
         background-color: transparent;
         align-items: flex-start;
         justify-content: flex-end;
@@ -33,6 +31,8 @@
         height: 90%;
 
         @include desktop {
+            background-color: $background-color-1;
+            border: 1px dashed grey;
             box-shadow: none;
             width: auto;
             height: auto;
@@ -46,5 +46,17 @@
 
     &__Icon {
         width: 2rem;
+        cursor: pointer;
+    }
+
+    &__Line {
+        @include desktop {
+            position: absolute;
+            top: 2rem;
+            left: -2.75rem;
+            width: 45px;
+            height: 0;
+            border: 0.5px dashed grey;
+        }
     }
 }

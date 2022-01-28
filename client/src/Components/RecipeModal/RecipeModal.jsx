@@ -7,7 +7,11 @@ import deleteIcon from '../../Assets/Icons/delete.svg';
 
 export default class RecipeModal extends Component {
     state = {
-        isEdit: true
+        isLoading: true,
+        type: '',
+    }
+
+    componentDidMount() {
     }
 
     renderInput = () => {
@@ -41,6 +45,7 @@ export default class RecipeModal extends Component {
                     <img className='Recipe-Modal__Icon' onClick={() => hideModal(recipe)} src={closeIcon} alt="" />      
                     {recipe.id ? <img className='Recipe-Modal__Icon' src={deleteIcon} alt='delete' onClick={() => deleteRecipe(recipe.id)} /> : <></>}
                 </div>
+                <div className='Recipe-Modal__Line'></div>
             </form>
         )
     }
