@@ -1,0 +1,29 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Ingredients {
+    &__Title-Container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__Header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    &__Title {
+        @include subtitles;
+        margin: 0;
+    }
+
+    &__List {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex-grow: 1;
+    }
+}

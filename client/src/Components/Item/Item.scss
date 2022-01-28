@@ -1,0 +1,37 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px grey dashed;
+    border-radius: 10px;
+    padding: 0.75rem;
+    background-color: $background-color-4;
+    cursor: pointer;
+
+    &:last-child {
+        margin-bottom: 8rem;
+    }
+
+    &:hover {
+        background-color: $active-state;
+    }
+
+    &__Title {
+        @include body;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    &__Body {
+        @include body;
+        margin: 0;
+    }
+
+    &__Icon {
+        height: 1.5rem;
+        margin-left: auto;
+    }
+}

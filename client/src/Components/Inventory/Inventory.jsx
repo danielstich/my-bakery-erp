@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import axios from 'axios';
 import './Inventory.scss';
-import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
 import EditItem from '../EditItem/EditItem';
+import Item from '../Item/Item';
 
 export default class Inventory extends Component {
     state = {
@@ -120,13 +120,7 @@ export default class Inventory extends Component {
                 </div>
                 <div className='Inventory__Items'>
                     {!this.state.isLoading && this.state.inventory.map(item => {
-                        return (
-                            <div key={item.id} onClick={() => this.selectItem(item)} className='Item'>
-                                <h3 className='Item__Title'>{item.name}</h3>
-                                <p className='Item__Body'>{item.qty} {item.unit}</p>
-                                <img onClick={this.editModal} className='Item__Icon' src={editIcon} alt="" />
-                            </div>
-                        )
+                        return <Item key={item.id} item={item} editModal={this.editModal} />
                     })}
                 </div>
                 <div className='Inventory__Item'>

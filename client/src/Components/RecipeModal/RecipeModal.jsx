@@ -38,7 +38,7 @@ export default class RecipeModal extends Component {
                 />
                 <Button extraClasses='Button--EditItem' type="submit" label={recipe.id ? 'Edit Item' : 'Add Item'}/>
                 <div className='Recipe-Modal__Icon-Container'>
-                    <img className='Recipe-Modal__Icon' onClick={hideModal} src={closeIcon} alt="" />      
+                    <img className='Recipe-Modal__Icon' onClick={() => hideModal(recipe)} src={closeIcon} alt="" />      
                     {recipe.id ? <img className='Recipe-Modal__Icon' src={deleteIcon} alt='delete' onClick={() => deleteRecipe(recipe.id)} /> : <></>}
                 </div>
             </form>
