@@ -3,14 +3,17 @@ import axios from 'axios';
 import './Recipes.scss';
 import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
+import listIcon from '../../Assets/Icons/list.svg'
 import RecipeModal from '../RecipeModal/RecipeModal';
 
 export default class Recipes extends Component {
     state = {
-        isLoading: false,
+        isLoading: true,
         recipes: [],
+        showEditModal: false,
+        showAddModal: false,
+        showIngredients: false,
         currentRecipe: {},
-        showModal: false,
         API_URL: process.env.REACT_APP_API_URL,
         options: {
             headers: {
@@ -30,10 +33,11 @@ export default class Recipes extends Component {
             .then(response => {
                 this.setState({
                     recipes: response.data.recipes,
-                    currentRecipe: {...response.data.recipes[0]} || {},
+                    currentRecipe: {...response.data.recipes[0]},
                     isLoading: false
                 })
-            }).catch(error => {
+            })
+            .catch(error => {
                 console.log(error.message)
             })
     }
@@ -41,13 +45,12 @@ export default class Recipes extends Component {
     responseHandler = promise => {
         promise
             .then(response => {
-                console.log(response);
                 this.getRecipes();
                 this.hideModal();
                 return;
             })
             .catch(error => {
-                console.log(error.message, error.response.data);
+                console.log(error.message, error.response);
                 return;
             })
     }
@@ -74,18 +77,24 @@ export default class Recipes extends Component {
         recipe[name] = value;
         this.setState({currentRecipe :recipe})
     }
-    
-    selectRecipe = (recipe) => {
-        this.setState({currentRecipe: recipe})
-    }
 
-    hideModal = () => {
-        this.setState({showModal: false})
+    hideModal = (recipe) => {
+        if (!recipe?.name) recipe = {...this.state.prevRecipe}
+        let newState = {
+            showEditModal: false,
+            showAddModal: false,
+            showIngredients: false,
+            currentRecipe: recipe};
+        this.setState(newState)
     }
 
     addModal = () => {
+        const prevRecipe = {...this.state.currentRecipe}
         this.setState({
-            showModal: true,
+            showEditModal: false,
+            showAddModal: true,
+            showIngredients: false,
+            prevRecipe,
             currentRecipe: {
                 name: '',
                 description: '',
@@ -93,52 +102,61 @@ export default class Recipes extends Component {
         })
     }
 
-    editModal = () => {
+    editModal = (recipe) => {
         this.setState({
-            showModal: true
+            currentRecipe: recipe,
+            showEditModal: true,
+            showAddModal: false,
+            showIngredients: false,
         })
     }
-  
-    render() {
-        const recipeModal = (
-            <RecipeModal 
-                        onChangeHandler={this.onChangeHandler} 
-                        onSubmitHandler={this.submitRecipe} 
-                        hideModal={this.hideModal} 
-                        deleteRecipe={this.deleteRecipe}
-                        recipe={this.state.currentRecipe}/>
-        )
 
+    ingredientsModal = (recipe) => {
+        this.setState({
+            currentRecipe: recipe,
+            showEditModal: false,
+            showAddModal: false,
+            showIngredients: true
+        })
+    }
+
+    renderModal = (type) => {
+        return (
+            <RecipeModal 
+            type={type}
+            onChangeHandler={this.onChangeHandler} 
+            onSubmitHandler={this.submitRecipe} 
+            hideModal={this.hideModal} 
+            deleteRecipe={this.deleteRecipe}
+            recipe={this.state.currentRecipe}/>)
+    }
+  
+    render() { 
+        if (this.state.isLoading) return <></>;
         return (
             <div className='Recipes'>
-                <div className='Recipes__Modal'>
-                    {this.state.showModal ? recipeModal : <></>}
-                </div>
-
-                <div className='Recipes__Header'>
-                    <h1 className='Recipes__Title'>Recipes</h1>
-                    <img onClick={this.addModal} className='Recipes__Add-Icon' src={addIcon} alt="add button" />
-                </div>
-                <div className='Recipes__List'>
-                    {!this.state.isLoading && this.state.recipes.map(recipe => {
-                        return (
-                            <div className='Recipe' key={recipe.id} onClick={() => this.selectRecipe(recipe)}>
-                                <div className='Recipe__Label-Container'>
-                                    <h3 className='Recipe__Title'>{recipe.name}</h3>
-                                    <p className='Recipe__Body'>{recipe.description}</p>
+                <div className='Recipes__Container'>
+                    <div className='Recipes__Header'>
+                        <h1 className='Recipes__Title'>Recipes</h1>
+                        <img onClick={this.addModal} className='Button Button--Add-Icon' src={addIcon} alt="add button" />
+                        {this.state.showAddModal && this.renderModal('add')}
+                    </div>
+                    <div className='Recipes__List'>
+                        {!this.state.isLoading && this.state.recipes.map(recipe => {
+                            return (
+                                <div className='Recipe' key={recipe.id}>
+                                    <div className='Recipe__Label-Container'>
+                                        <h3 className='Recipe__Title'>{recipe.name}</h3>
+                                        <p className='Recipe__Body'>{recipe.description}</p>
+                                    </div>
+                                    {this.state.showEditModal && (this.state.currentRecipe.id === recipe.id) && this.renderModal('edit')}
+                                    {this.state.showIngredients && (this.state.currentRecipe.id === recipe.id) && this.renderModal('ingredients')}
+                                    <img onClick={() => this.editModal(recipe)} className='Recipe__Icon Recipe__Icon--edit' src={editIcon} alt="" />
+                                    <img onClick={() => this.ingredientsModal(recipe)} className='Recipe__Icon' src={listIcon} alt="" />
                                 </div>
-                                <img onClick={this.editModal} className='Recipe__Icon' src={editIcon} alt="" />
-                            </div>
-                        )
-                    })}
-                </div>
-                <div className='Recipes__Item'>
-                    {this.state.showModal ? recipeModal : 
-                        (!this.state.isLoading &&
-                        <div><p>Recipe: {this.state.currentRecipe.name}</p>
-                        <p>Description: {this.state.currentRecipe.description}</p></div>)
-                    }
-                    
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         )

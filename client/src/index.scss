@@ -1,4 +1,9 @@
 @use './Styles/fonts' as *;
+@use './Styles/variables' as *;
+
+html {
+    background-color: $background-color-5;
+}
 
 *,
 *::after,

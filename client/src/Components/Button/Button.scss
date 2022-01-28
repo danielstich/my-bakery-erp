@@ -28,5 +28,23 @@
     }
 
     &--EditItem {
+        width: 15rem;
+    }
+
+    &--Add-Icon {
+        padding: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
     }
 }

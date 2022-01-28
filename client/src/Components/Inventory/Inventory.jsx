@@ -1,16 +1,21 @@
 import { Component } from 'react';
 import axios from 'axios';
 import './Inventory.scss';
-import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
 import EditItem from '../EditItem/EditItem';
+import Item from '../Item/Item';
 
 export default class Inventory extends Component {
     state = {
         isLoading: true,
         inventory: [],
-        currentItem: {},
-        showModal: false,
+        currentItem: {
+            name: '',
+            qty: '',
+            unit: ''
+        },
+        showEditModal: false,
+        showAddModal: false,
         API_URL: process.env.REACT_APP_API_URL,
         options: {
             headers: {
@@ -66,10 +71,6 @@ export default class Inventory extends Component {
         this.responseHandler(promise);
     }
 
-    selectItem = (item) => {
-        this.setState({currentItem: item})
-    }
-
     onChangeHandler = (event) => {
         const { name, value } = event.target;
         const item = {...this.state.currentItem};
@@ -78,12 +79,16 @@ export default class Inventory extends Component {
     }
 
     hideModal = () => {
-        this.setState({showModal: false})
+        this.setState({
+            showEditModal: false,
+            showAddModal: false
+        })
     }
 
     addModal = () => {
         this.setState({
-            showModal: true,
+            showAddModal: true,
+            showEditModal: false,
             currentItem: {
                 name: '',
                 qty: '',
@@ -92,51 +97,51 @@ export default class Inventory extends Component {
         })
     }
 
-    editModal = () => {
+    editModal = (item) => {
         this.setState({
-            showModal: true
+            currentItem: item,
+            showEditModal: true,
+            showAddModal: false
         })
     }
 
-    render() {
-        const editAddModal = (
-            <EditItem 
+    renderModal = () => {
+        return (
+            <div className='Inventory__Modal-Container'>
+                <div className='Inventory__Modal'>
+                    <EditItem 
+                        type='item'
                         onChangeHandler={this.onChangeHandler} 
                         onSubmitHandler={this.submitItem} 
                         hideModal={this.hideModal} 
                         deleteItem={this.deleteItem}
                         item={this.state.currentItem}/>
+                </div>    
+                <div className='Inventory__Line'></div>
+            </div>
         )
+    }
 
+    render() {
         return (
             <div className='Inventory'>
-                <div className='Inventory__Modal'>
-                    {this.state.showModal ? editAddModal : <></>}
-                </div>
-                
                 <div className='Inventory__Header'>
+                    {this.state.showAddModal && this.renderModal()}
                     <h1 className='Inventory__Title'>Inventory</h1>
                     <img onClick={this.addModal} className='Inventory__Add-Icon' src={addIcon} alt="add button" />
                 </div>
                 <div className='Inventory__Items'>
                     {!this.state.isLoading && this.state.inventory.map(item => {
                         return (
-                            <div key={item.id} onClick={() => this.selectItem(item)} className='Item'>
-                                <h3 className='Item__Title'>{item.name}</h3>
-                                <p className='Item__Body'>{item.qty} {item.unit}</p>
-                                <img onClick={this.editModal} className='Item__Icon' src={editIcon} alt="" />
+                            <div className='Inventory__Items-Container'>
+                                <Item key={item.id} item={item} editModal={this.editModal} deleteItem={this.deleteItem} />
+                                {this.state.showEditModal && this.state.currentItem.id === item.id && this.renderModal()}
                             </div>
-                        )
+                            )
+                            
                     })}
                 </div>
-                <div className='Inventory__Item'>
-                    {this.state.showModal ? editAddModal : 
-                        (!this.state.isLoading &&
-                        <div><p>Item: {this.state.currentItem.name}</p>
-                        <p>Quantity: {this.state.currentItem.qty} {this.state.currentItem.unit}</p></div>)
-                    }
-                    
-                </div>
+                
             </div>
         );
     }
