@@ -133,8 +133,8 @@ export default class Inventory extends Component {
                 <div className='Inventory__Items'>
                     {!this.state.isLoading && this.state.inventory.map(item => {
                         return (
-                            <div className='Inventory__Items-Container'>
-                                <Item key={item.id} item={item} editModal={this.editModal} deleteItem={this.deleteItem} />
+                            <div key={item.id} className='Inventory__Items-Container'>
+                                <Item item={item} editModal={this.editModal} deleteItem={this.deleteItem} />
                                 {this.state.showEditModal && this.state.currentItem.id === item.id && this.renderModal()}
                             </div>
                             )

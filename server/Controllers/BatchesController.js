@@ -17,6 +17,7 @@ exports.getBatch = (req, res) => {
 // add new batch
 exports.addBatch = (req, res) => {
     // get promises for inventory and ingredients
+    console.log(req.body, req.user)
     const ingredientsPromise = knex('ingredients').where({recipe_id: req.body.recipe_id, user_id: req.user.id});
     const inventoryPromise = knex('inventory').where({user_id: req.user.id});
 
@@ -76,14 +77,16 @@ exports.addBatch = (req, res) => {
             res.status(200).json({success: 'Batch Added'})
         })
         .catch(error => {
+            console.log(error)
             if (error.status) throw error;
             throw {status: 400, error: `Could not add batch: ${error.sqlMessage}`}
         })
     })
     .catch(error => {
+        console.log(error)
         if (error.checkObject) return res.status(error.status).json({error: error.checkObject});
         if (error.status) return res.status(error.status).json({error: error.error});
-        res.status(400).json({error: `Could not add batch: ${error.sqlMessage}`});
+        res.status(400).json({error: `Could not add batch: ${error.sqlMessage ? error.sqlMessage : error}`});
     })
 }
 
