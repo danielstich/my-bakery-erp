@@ -6,11 +6,11 @@ import closeIcon from '../../Assets/Icons/close_black_24dp.svg';
 import deleteIcon from '../../Assets/Icons/delete.svg';
 
 export default function EditItem(props) {
-    const { onChangeHandler, onSubmitHandler, deleteItem, hideModal, item } = props;
+    const { type, onChangeHandler, onSubmitHandler, deleteItem, hideModal, item } = props;
 
     const submitItem = item.id ? ((event) => {onSubmitHandler(event, item.id)}) : onSubmitHandler;
-    const numField = item.qty ? 'qty' : 'amount';
-    const label = item.qty ? 'Quantity' : 'Amount';
+    const numField = type === 'item' ? 'qty' : 'amount';
+    const label = type === 'item' ? 'Quantity' : 'Amount';
 
     return (
         <div className='EditItem'>
@@ -31,7 +31,7 @@ export default function EditItem(props) {
                     type='number'
                     name={numField}
                     id={numField}
-                    value={item.qty ? item.qty : item.amount}
+                    value={type === 'item' ? item.qty : item.amount}
                     placeholder={label}
                     onChangeHandler={onChangeHandler}
                     />

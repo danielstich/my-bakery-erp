@@ -60,7 +60,6 @@ export default class Ingredients extends Component {
         const { API_URL, options } = this.state;
         const newIngredient = {...this.state.currentIngredient};
         newIngredient.recipe_id = this.props.recipe.id;
-        console.log(newIngredient, id)
         const promise = id ? 
             axios.put(`${API_URL}/ingredients/${id}`, newIngredient, options) :
             axios.post(`${API_URL}/ingredients`, newIngredient, options)
@@ -68,7 +67,6 @@ export default class Ingredients extends Component {
     }
 
     deleteItem = (id) => {
-        console.log(id);
         const { API_URL, options } = this.state;
         const promise = axios.delete(`${API_URL}/ingredients/${id}`, options);
         this.responseHandler(promise);
@@ -113,6 +111,7 @@ export default class Ingredients extends Component {
 
     renderEdit = () => {
         return <EditItem 
+            type='ingredient'
             onChangeHandler={this.onChangeHandler}
             onSubmitHandler={this.submitItem}
             hideModal={this.hideModal}

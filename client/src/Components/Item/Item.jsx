@@ -4,7 +4,7 @@ import editIcon from '../../Assets/Icons/edit.svg';
 import deleteIcon from '../../Assets/Icons/delete.svg';
 
 export default function Item(props) {
-    const { item, editModal, deleteItem } = props
+    const { item, editModal, deleteItem } = props;
     return (
     <div key={item.id} className='Item'>
         <h3 className='Item__Title'>{item.name}</h3>
