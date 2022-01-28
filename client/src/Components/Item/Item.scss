@@ -9,7 +9,6 @@
     border-radius: 10px;
     padding: 0.75rem;
     background-color: $background-color-4;
-    cursor: pointer;
 
     &:last-child {
         margin-bottom: 8rem;
@@ -31,6 +30,7 @@
 
     &__Icon {
         height: 1.5rem;
+        cursor: pointer;
         &--edit {
             margin-left: auto;
         }

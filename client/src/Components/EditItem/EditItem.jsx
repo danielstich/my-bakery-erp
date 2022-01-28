@@ -9,7 +9,9 @@ export default function EditItem(props) {
     const { onChangeHandler, onSubmitHandler, deleteItem, hideModal, item } = props;
 
     const submitItem = item.id ? ((event) => {onSubmitHandler(event, item.id)}) : onSubmitHandler;
-    
+    const numField = item.qty ? 'qty' : 'amount';
+    const label = item.qty ? 'Quantity' : 'Amount';
+
     return (
         <div className='EditItem'>
             <form 
@@ -25,12 +27,12 @@ export default function EditItem(props) {
                     onChangeHandler={onChangeHandler}
                     />
                 <InputField 
-                    label='Quantity'
+                    label={label}
                     type='number'
-                    name='qty'
-                    id='qty'
-                    value={item ? item.qty : ''}
-                    placeholder='Quantity'
+                    name={numField}
+                    id={numField}
+                    value={item.qty ? item.qty : item.amount}
+                    placeholder={label}
                     onChangeHandler={onChangeHandler}
                     />
                 <InputField 

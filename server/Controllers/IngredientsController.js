@@ -25,7 +25,8 @@ exports.getIngredient = (req, res) => {
 }
 
 exports.addIngredient = (req, res) => {
-    const newIngredient = req.body.ingredient;
+    const newIngredient = req.body;
+    console.log(req.user.id)
     newIngredient.user_id = req.user.id;
     if (checkReqBody(newIngredient, res)) return;
     const promise = knex('ingredients').insert(newIngredient);

@@ -86,10 +86,6 @@
         margin-bottom: 8rem;
     }
 
-    &:hover {
-        background-color: $active-state;
-    }
-
     &__Title {
         @include body;
         font-weight: 500;
