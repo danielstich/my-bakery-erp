@@ -5,7 +5,6 @@ import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
 import listIcon from '../../Assets/Icons/list.svg'
 import RecipeModal from '../RecipeModal/RecipeModal';
-import Ingredients from '../Ingredients/Ingredients';
 
 export default class Recipes extends Component {
     state = {
@@ -15,7 +14,6 @@ export default class Recipes extends Component {
         showAddModal: false,
         showIngredients: false,
         currentRecipe: {},
-        ingredients: [],
         API_URL: process.env.REACT_APP_API_URL,
         options: {
             headers: {
@@ -28,20 +26,6 @@ export default class Recipes extends Component {
         this.getRecipes();
     }
 
-    componentDidUpdate = (_prevProp, prevState) => {
-        if (prevState.currentRecipe.id === this.state.currentRecipe.id) return;
-        const { API_URL, options } = this.state;
-        const recipeID = this.state.currentRecipe.id;
-        axios.get(`${API_URL}/ingredients?recipeID=${recipeID}`, options)
-                    .then(response => {
-                        const ingredients = response.data.ingredients;
-                        this.setState({
-                            ingredients: ingredients,
-                            isLoading: false
-                        })
-                    })
-    }
-
     getRecipes = () => {
         const { API_URL, options } = this.state;
 
@@ -49,17 +33,8 @@ export default class Recipes extends Component {
             .then(response => {
                 this.setState({
                     recipes: response.data.recipes,
-                    currentRecipe: {...response.data.recipes[0]}
-                }, () => {
-                    const recipeID = this.state.currentRecipe.id;
-                    axios.get(`${API_URL}/ingredients?recipeID=${recipeID}`, options)
-                    .then(response => {
-                        const ingredients = response.data.ingredients;
-                        this.setState({
-                            ingredients: ingredients,
-                            isLoading: false
-                        })
-                    })
+                    currentRecipe: {...response.data.recipes[0]},
+                    isLoading: false
                 })
             })
             .catch(error => {
@@ -102,16 +77,9 @@ export default class Recipes extends Component {
         recipe[name] = value;
         this.setState({currentRecipe :recipe})
     }
-    
-    selectRecipe = (recipe) => {
-        this.setState({
-            currentRecipe: recipe,
-            showIngredients: true
-        })
-    }
 
     hideModal = (recipe) => {
-        if (!recipe.name) recipe = {...this.state.prevRecipe}
+        if (!recipe?.name) recipe = {...this.state.prevRecipe}
         let newState = {
             showEditModal: false,
             showAddModal: false,
@@ -123,7 +91,9 @@ export default class Recipes extends Component {
     addModal = () => {
         const prevRecipe = {...this.state.currentRecipe}
         this.setState({
+            showEditModal: false,
             showAddModal: true,
+            showIngredients: false,
             prevRecipe,
             currentRecipe: {
                 name: '',
@@ -135,19 +105,24 @@ export default class Recipes extends Component {
     editModal = (recipe) => {
         this.setState({
             currentRecipe: recipe,
-            showEditModal: true
+            showEditModal: true,
+            showAddModal: false,
+            showIngredients: false,
         })
     }
 
-    ingredientsModal = () => {
-        this.setState({showIngredients: true})
+    ingredientsModal = (recipe) => {
+        this.setState({
+            currentRecipe: recipe,
+            showEditModal: false,
+            showAddModal: false,
+            showIngredients: true
+        })
     }
 
     renderModal = (type) => {
-        console.log(type)
         return (
             <RecipeModal 
-            ingredients={this.state.ingredients}
             type={type}
             onChangeHandler={this.onChangeHandler} 
             onSubmitHandler={this.submitRecipe} 
@@ -177,7 +152,7 @@ export default class Recipes extends Component {
                                     {this.state.showEditModal && (this.state.currentRecipe.id === recipe.id) && this.renderModal('edit')}
                                     {this.state.showIngredients && (this.state.currentRecipe.id === recipe.id) && this.renderModal('ingredients')}
                                     <img onClick={() => this.editModal(recipe)} className='Recipe__Icon Recipe__Icon--edit' src={editIcon} alt="" />
-                                    <img onClick={() => this.selectRecipe(recipe)} className='Recipe__Icon' src={listIcon} alt="" />
+                                    <img onClick={() => this.ingredientsModal(recipe)} className='Recipe__Icon' src={listIcon} alt="" />
                                 </div>
                             )
                         })}

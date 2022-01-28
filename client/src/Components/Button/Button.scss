@@ -28,6 +28,7 @@
     }
 
     &--EditItem {
+        width: 15rem;
     }
 
     &--Add-Icon {
@@ -36,7 +37,6 @@
         height: 2.5rem;
         background-color: $background-color-3;
         border-radius: 50%;
-        align-self: flex-end;
         cursor: pointer;
 
         &:hover {

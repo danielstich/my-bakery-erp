@@ -18,10 +18,6 @@
         }
     }
 
-    &:hover {
-        background-color: $active-state;
-    }
-
     &__Title {
         @include body;
         font-weight: 500;
@@ -35,6 +31,8 @@
 
     &__Icon {
         height: 1.5rem;
-        margin-left: auto;
+        &--edit {
+            margin-left: auto;
+        }
     }
 }

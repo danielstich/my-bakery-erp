@@ -2,18 +2,31 @@
 @use '../../Styles/variables' as *;
 
 .Ingredients {
-    border: 1px solid black;
-    padding: 0 1rem 1rem 1rem;
+    padding: 1rem;
+    border-radius: 20px;
+    background-color: $background-color-5;
+    width: 24.125rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include desktop {
+        border: 1px dashed grey;
+    }
+
     &__Title-Container {
         display: flex;
         justify-content: space-between;
     }
 
     &__Header {
+        width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
+        padding-bottom: 1rem;
     }
 
     &__Title {
@@ -27,5 +40,30 @@
         flex-direction: column;
         gap: 0.5rem;
         flex-grow: 1;
+    }
+
+    &__Icon {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        width: 2rem;
+        cursor: pointer;
+        @include desktop {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-top: 1rem;
+        }
+    }
+
+    &__Line {
+        @include desktop {
+            position: absolute;
+            top: 0.625rem;
+            left: -2.8rem;
+            width: 48px;
+            height: 0;
+            border: 0.5px dashed grey;
+        }
     }
 }
