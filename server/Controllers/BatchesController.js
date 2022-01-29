@@ -17,7 +17,6 @@ exports.getBatch = (req, res) => {
 // add new batch
 exports.addBatch = (req, res) => {
     // get promises for inventory and ingredients
-    console.log(req.body, req.user)
     const ingredientsPromise = knex('ingredients').where({recipe_id: req.body.recipe_id, user_id: req.user.id});
     const inventoryPromise = knex('inventory').where({user_id: req.user.id});
 
@@ -28,16 +27,16 @@ exports.addBatch = (req, res) => {
     .then(results => {
         const ingredients = [...results[0]];
         const inventory = [...results[1]];
-        // create object to add list of ingredients either not found or not enough stock
-        const checkObject = []
+        // create array to add list of ingredients either not found or not enough stock
+        const checkArray = []
         ingredients.forEach(ingredient => {
             const item = inventory.find(item => item.name === ingredient.name && item.unit === ingredient.unit);
-            if (!item) return checkObject.push(`${ingredient.name} is not found`);
-            if (item.qty < ingredient.amount * req.body.qty) checkObject.push(`You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty} ${item.unit}`);
+            if (!item) return checkArray.push(`${ingredient.name} is not found`);
+            if (item.qty < ingredient.amount * req.body.qty) checkArray.push(`You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty} ${item.unit}`);
         })
         
         // if any keys added, throw error
-        if (checkObject.length !== 0) throw {status: 400, error: checkObject.join(', ')};
+        if (checkArray.length !== 0) throw {status: 400, error: checkArray.join(', ')};
 
         
         // start knex transaction for adding batch, adding ingredients used, updating inventory
@@ -86,7 +85,7 @@ exports.addBatch = (req, res) => {
     })
     .catch(error => {
         console.log(error)
-        if (error.checkObject) return res.status(error.status).json({error: error.checkObject});
+        if (error.checkArray) return res.status(error.status).json({error: error.checkArray});
         if (error.status) return res.status(error.status).json({error: error.error});
         res.status(400).json({error: `Could not add batch: ${error.sqlMessage ? error.sqlMessage : error}`});
     })
@@ -116,9 +115,18 @@ exports.deleteBatch = (req, res) => {
                 const promiseArrary = [];
                 ingredients.forEach(ingredient => {
                     const item = inventory.find(item => item.name === ingredient.name && item.unit === ingredient.unit);
-                    item.qty += ingredient.amount;
-                    delete item.update_at;
-                    promiseArrary.push(knex('inventory').where({id: item.id, user_id: userID}).update(item).transacting(trx));
+                    if (!item) {
+                        const newItem = {...ingredient};
+                        delete newItem.id;
+                        delete newItem.batch_id;
+                        newItem.qty = newItem.amount;
+                        delete newItem.amount;
+                        promiseArrary.push(knex('inventory').insert(newItem))
+                    } else {
+                        item.qty += ingredient.amount;
+                        delete item.update_at;
+                        promiseArrary.push(knex('inventory').where({id: item.id, user_id: userID}).update(item).transacting(trx));
+                    }
                 })
 
                 return Promise.all(promiseArrary);
@@ -131,7 +139,7 @@ exports.deleteBatch = (req, res) => {
         })
         .then(() => {
             // if success, send status and message
-            res.status(200).json({success: 'Batch Delete'})
+            res.status(200).json({success: 'Batch Deleted'})
         })
         .catch(error => {
             if (error.status) throw error;
@@ -139,23 +147,7 @@ exports.deleteBatch = (req, res) => {
         })
     })
     .catch(error => {
-        if (error.checkObject) return res.status(error.status).json({error: error.checkObject});
         if (error.status) return res.status(error.status).json({error: error.error});
-        res.status(400).json({error: `Could not add batch: ${error.sqlMessage}`});
+        res.status(400).json({error: `Could not delete batch: ${error.sqlMessage}`});
     })
-}
-
-// get ingredients used
-exports.getIngredientsUsed = (req, res) => {
-    const batchID = req.params.id;
-    const userID = req.user.id;
-
-    knex('ingredients_used').where({batch_id: batchID, user_id: userID})
-        .then(data => {
-            const ingredients = [...data];
-            res.status(200).json(ingredients)
-        })
-        .catch(error => {
-            res.status(400).json({error: "Could not retrieve ingredients"})
-        })
 }
