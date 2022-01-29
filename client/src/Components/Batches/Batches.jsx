@@ -28,13 +28,13 @@ export default class Batches extends Component {
     responseHandler = promise => {
         promise
             .then(response => {
+                this.props.alertHandler({type: 'success', msg: response.data.success})
                 this.getBatches();
                 this.hideModal();
-                return;
             })
             .catch(error => {
+                this.props.alertHandler({type: 'error', msg: error.response.data.error})
                 console.log(error.message, error.response);
-                return;
             })
     }
 
@@ -121,6 +121,7 @@ export default class Batches extends Component {
     renderModal = (type) => {
         return (
             <BatchModal
+            alertHandler={this.props.alertHandler}
             type={type}
             onRecipeChangeHandler={this.onRecipeChangeHandler}
             recipes={this.state.recipes}

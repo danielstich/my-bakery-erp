@@ -6,9 +6,10 @@ import deleteIcon from '../../Assets/Icons/delete.svg';
 import Ingredients from '../Ingredients/Ingredients';
 import AddBatchForm from '../AddBatchForm/AddBatchForm';
 
-export default function RecipeModal({ recipe, onSubmitBatch, onChangeHandler, onChangeBatchHandler, onSubmitHandler, hideModal, deleteRecipe, type }) {
+export default function RecipeModal({ recipe, alertHandler, onSubmitBatch, onChangeHandler, onChangeBatchHandler, onSubmitHandler, hideModal, deleteRecipe, type }) {
     
-    const renderIngredients = <Ingredients 
+    const renderIngredients = <Ingredients
+        alertHandler={alertHandler} 
         hideModal={hideModal} 
         recipe={recipe} />  
 

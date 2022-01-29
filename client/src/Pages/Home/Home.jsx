@@ -8,9 +8,15 @@ import axios from 'axios';
 
 import Header from '../../Components/Header/Header';
 import Toolbar from '../../Components/Toolbar/Toolbar';
+import Alert from '../../Components/Alert/Alert';
 
 export default class Home extends Component {
   state = {
+    showAlert: false,
+    alert: {
+        type: '',
+        msg: ''
+    },
     isLoggedIn: false,
     isVerifying: true,
     user: null
@@ -41,6 +47,21 @@ export default class Home extends Component {
     }
   }
 
+  alert = (alert) => {
+    console.log(alert.msg)
+    this.setState({
+        showAlert: true,
+        alert: alert
+    }, () => {
+        setTimeout(() => {
+            console.log('hide message')
+            this.setState({
+                showAlert: false,
+            })
+        }, 2000)
+    })
+}
+
   render() {
     const url = this.props.match.url;
     return (
@@ -50,14 +71,15 @@ export default class Home extends Component {
           <div className='Home__Switch'>
             {this.state.isLoggedIn && 
             <Switch>
-              <Route path={url + '/inventory'} component={Inventory} />
-              <Route path={url + '/recipes'} component={Recipes} /> 
-              <Route path={url + '/batches'} component={Batches} />
+              <Route path={url + '/inventory'} render={(props)=> <Inventory {...props} alertHandler={this.alert} />} />
+              <Route path={url + '/recipes'} render={(props)=> <Recipes {...props} alertHandler={this.alert} />} /> 
+              <Route path={url + '/batches'} render={(props)=> <Batches {...props} alertHandler={this.alert} />} />
             </Switch>
             }
           </div>
           {this.state.isLoggedIn && <Toolbar />}
         </div>
+        <Alert show={this.state.showAlert} alert={this.state.alert} />
       </div>
     )
   }

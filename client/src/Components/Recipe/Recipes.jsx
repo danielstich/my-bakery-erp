@@ -41,6 +41,7 @@ export default class Recipes extends Component {
                 })
             })
             .catch(error => {
+                this.props.alertHandler({type: 'error', error})
                 console.log(error.message)
             })
     }
@@ -48,13 +49,13 @@ export default class Recipes extends Component {
     responseHandler = promise => {
         promise
             .then(response => {
+                this.props.alertHandler({type: 'success', msg: response.data.success})
                 this.getRecipes();
                 this.hideModal();
-                return;
             })
             .catch(error => {
                 console.log(error.message, error.response);
-                return;
+                this.props.alertHandler({type: 'error', msg: error.response.data.error})
             })
     }
 
@@ -162,6 +163,7 @@ export default class Recipes extends Component {
         return (
             <RecipeModal 
             type={type}
+            alertHandler={this.props.alertHandler}
             onChangeBatchHandler={this.onChangeBatchHandler}
             onChangeHandler={this.onChangeHandler} 
             onSubmitBatch={this.submitBatch}
