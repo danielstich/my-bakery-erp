@@ -17,7 +17,6 @@ exports.getBatch = (req, res) => {
 // add new batch
 exports.addBatch = (req, res) => {
     // get promises for inventory and ingredients
-    console.log(req.body, req.user)
     const ingredientsPromise = knex('ingredients').where({recipe_id: req.body.recipe_id, user_id: req.user.id});
     const inventoryPromise = knex('inventory').where({user_id: req.user.id});
 
@@ -116,9 +115,18 @@ exports.deleteBatch = (req, res) => {
                 const promiseArrary = [];
                 ingredients.forEach(ingredient => {
                     const item = inventory.find(item => item.name === ingredient.name && item.unit === ingredient.unit);
-                    item.qty += ingredient.amount;
-                    delete item.update_at;
-                    promiseArrary.push(knex('inventory').where({id: item.id, user_id: userID}).update(item).transacting(trx));
+                    if (!item) {
+                        const newItem = {...ingredient};
+                        delete newItem.id;
+                        delete newItem.batch_id;
+                        newItem.qty = newItem.amount;
+                        delete newItem.amount;
+                        promiseArrary.push(knex('inventory').insert(newItem))
+                    } else {
+                        item.qty += ingredient.amount;
+                        delete item.update_at;
+                        promiseArrary.push(knex('inventory').where({id: item.id, user_id: userID}).update(item).transacting(trx));
+                    }
                 })
 
                 return Promise.all(promiseArrary);
