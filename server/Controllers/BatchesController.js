@@ -21,21 +21,23 @@ exports.addBatch = (req, res) => {
     const ingredientsPromise = knex('ingredients').where({recipe_id: req.body.recipe_id, user_id: req.user.id});
     const inventoryPromise = knex('inventory').where({user_id: req.user.id});
 
+    if (!req.body.name || !req.body.date || !req.body.qty) return res.status(400).json({error: "Missing Fields"})
+
     // resolve promises
     Promise.all([ingredientsPromise, inventoryPromise])
     .then(results => {
         const ingredients = [...results[0]];
         const inventory = [...results[1]];
         // create object to add list of ingredients either not found or not enough stock
-        const checkObject = {}
+        const checkObject = []
         ingredients.forEach(ingredient => {
             const item = inventory.find(item => item.name === ingredient.name && item.unit === ingredient.unit);
-            if (!item) return checkObject[item.name] = `${item.name} is not found`;
+            if (!item) return checkObject.push(`${ingredient.name} is not found`);
             if (item.qty < ingredient.amount * req.body.qty) checkObject[item.name] = `You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty} ${item.unit}`;
         })
         
         // if any keys added, throw error
-        if (Object.keys(checkObject).length !== 0) throw {status: 400, checkObject: checkObject};
+        if (checkObject.length !== 0) throw {status: 400, error: checkObject.join(', ')};
 
         
         // start knex transaction for adding batch, adding ingredients used, updating inventory
