@@ -36,6 +36,10 @@ export default class Ingredients extends Component {
                     isLoading: false
                 })
             })
+            .catch(error => {
+                this.props.alertHandler({type: 'error', error})
+                console.log(error.message)
+            })
     }
 
     componentDidMount() {
@@ -45,13 +49,13 @@ export default class Ingredients extends Component {
     responseHandler = promise => {
         promise
             .then(response => {
+                this.props.alertHandler({type: 'success', msg: response.data.success})
                 this.getIngredients();
                 this.hideModal();
-                return;
             })
             .catch(error => {
-                console.log(error.message, error.response);
-                return;
+                this.props.alertHandler({type: 'error', msg: error.response.data.error})
+                console.log(error.message, error.response)
             })
     }
 

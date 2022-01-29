@@ -31,13 +31,15 @@ export default class Inventory extends Component {
     getInventory = () => {
         const { API_URL, options } = this.state;
 
-        axios.get(`${API_URL}/inventory`, options).then(response => {
+        axios.get(`${API_URL}/inventory`, options)
+        .then(response => {
             this.setState({
                 isLoading: false,
                 inventory: response.data.items,
                 currentItem: {...response.data.items[0]}
             })
         }).catch(error => {
+            this.props.alertHandler({type: 'error', error})
             console.log(error.message)
         })
     }
@@ -45,14 +47,13 @@ export default class Inventory extends Component {
     responseHandler = promise => {
         promise
             .then(response => {
-                console.log(response);
+                this.props.alertHandler({type: 'success', msg: response.data.success})
                 this.getInventory();
                 this.hideModal();
-                return;
             })
             .catch(error => {
+                this.props.alertHandler({type: 'error', msg: error.response.data.error})
                 console.log(error.message, error.response.data);
-                return;
             })
     }
 
