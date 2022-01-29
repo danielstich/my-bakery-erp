@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import { Component } from 'react';
 import Inventory from '../../Components/Inventory/Inventory';
 import Recipes from '../../Components/Recipe/Recipes';
+import Batches from '../../Components/Batches/Batches';
 import axios from 'axios';
 
 import Header from '../../Components/Header/Header';
@@ -51,7 +52,7 @@ export default class Home extends Component {
             <Switch>
               <Route path={url + '/inventory'} component={Inventory} />
               <Route path={url + '/recipes'} component={Recipes} /> 
-              {/* <Route path={url + '/Batches'} component={Batches} /> */}
+              <Route path={url + '/batches'} component={Batches} />
             </Switch>
             }
           </div>

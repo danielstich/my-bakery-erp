@@ -44,6 +44,9 @@ export default function RecipeModal({ recipe, onSubmitBatch, onChangeHandler, on
                     onChangeHandler={onChangeBatchHandler}
                 />
                 <Button extraClasses='Button--EditItem' type='submit' label='Create Batch' />
+                <div className='Recipe-Modal__Icon-Container'>
+                    <img className='Recipe-Modal__Icon' onClick={() => hideModal(recipe)} src={closeIcon} alt="" />
+                </div>
                 <div className='Recipe-Modal__Line'></div>
             </form>
         )

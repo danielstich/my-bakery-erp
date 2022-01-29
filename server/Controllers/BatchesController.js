@@ -3,14 +3,14 @@ const { getAllItemsHandler, getItemHandler } = require('./ResponseHandler');
 
 // get all batches
 exports.getAllBatches = (req, res) => {
-    const promise = knex('batches').select('id', 'date', 'qty', 'recipe_id').where({user_id: req.user.id});
+    const promise = knex('batches').select('name', 'id', 'date', 'qty', 'recipe_id').where({user_id: req.user.id});
     getAllItemsHandler(res, promise, 'Batches');
 }
 
 // get one batch
 exports.getBatch = (req, res) => {
     const selection = {id: req.params.id, user_id: req.user.id};
-    const promise = knex('batches').select('id', 'date', 'qty', 'recipe_id').where(selection);
+    const promise = knex('batches').select('name', 'id', 'date', 'qty', 'recipe_id').where(selection);
     getItemHandler(res, promise, 'batch');
 }
 
