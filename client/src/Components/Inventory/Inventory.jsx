@@ -137,11 +137,9 @@ export default class Inventory extends Component {
                                 <Item item={item} editModal={this.editModal} deleteItem={this.deleteItem} />
                                 {this.state.showEditModal && this.state.currentItem.id === item.id && this.renderModal()}
                             </div>
-                            )
-                            
+                        )      
                     })}
                 </div>
-                
             </div>
         );
     }

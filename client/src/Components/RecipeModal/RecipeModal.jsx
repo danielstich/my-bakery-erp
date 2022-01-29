@@ -5,52 +5,19 @@ import Button from '../Button/Button';
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg';
 import deleteIcon from '../../Assets/Icons/delete.svg';
 import Ingredients from '../Ingredients/Ingredients';
+import AddBatchForm from '../AddBatchForm/AddBatchForm';
 
 export default function RecipeModal({ recipe, onSubmitBatch, onChangeHandler, onChangeBatchHandler, onSubmitHandler, hideModal, deleteRecipe, type }) {
     
-    const renderIngredients = () => {
-        return (
-            <Ingredients hideModal={hideModal} recipe={recipe} />
-        )
-    }
+    const renderIngredients = <Ingredients 
+        hideModal={hideModal} 
+        recipe={recipe} />  
 
-    const renderBatchInput = () => {
-        return (
-            <form
-                className='Recipe-Modal__Form'
-                onSubmit={onSubmitBatch}>
-                <h3 className='Recipe-Modal__Title'>Create Batch</h3>
-                <InputField 
-                    label='Batch Name'
-                    type='text'
-                    name='name'
-                    id='name'
-                    placeholder={recipe.name}
-                    onChangeHandler={onChangeBatchHandler}
-                />
-                <InputField 
-                    label='Date'
-                    type='date'
-                    name='date'
-                    id='date'
-                    onChangeHandler={onChangeBatchHandler}
-                />
-                <InputField 
-                    label='Quantity'
-                    type='number'
-                    name='qty'
-                    id='qty'
-                    placeholder='Quantity'
-                    onChangeHandler={onChangeBatchHandler}
-                />
-                <Button extraClasses='Button--EditItem' type='submit' label='Create Batch' />
-                <div className='Recipe-Modal__Icon-Container'>
-                    <img className='Recipe-Modal__Icon' onClick={() => hideModal(recipe)} src={closeIcon} alt="" />
-                </div>
-                <div className='Recipe-Modal__Line'></div>
-            </form>
-        )
-    }
+    const renderBatchInput = <AddBatchForm 
+            onSubmitBatch={onSubmitBatch} 
+            recipe={recipe}
+            onChangeBatchHandler={onChangeBatchHandler}
+            hideModal={hideModal} />
 
     const renderInput = () => {
         const submitRecipe = recipe.id ? ((event) => {onSubmitHandler(event, recipe.id)}) : onSubmitHandler;
@@ -92,7 +59,7 @@ export default function RecipeModal({ recipe, onSubmitBatch, onChangeHandler, on
             {(type === 'ingredients') && renderIngredients()}
             {(type === 'add') && renderInput()}
             {(type === 'edit') && renderInput()}
-            {(type === 'batch') && renderBatchInput()}
+            {(type === 'batch') && renderBatchInput}
         </div>
     )
     
