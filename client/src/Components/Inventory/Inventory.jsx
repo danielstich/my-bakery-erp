@@ -4,6 +4,7 @@ import './Inventory.scss';
 import addIcon from '../../Assets/Icons/add.svg';
 import EditItem from '../EditItem/EditItem';
 import Item from '../Item/Item';
+import Alert from '../Alert/Alert';
 
 export default class Inventory extends Component {
     state = {
@@ -16,6 +17,11 @@ export default class Inventory extends Component {
         },
         showEditModal: false,
         showAddModal: false,
+        showAlert: false,
+        alert: {
+            type: '',
+            msg: ''
+        },
         API_URL: process.env.REACT_APP_API_URL,
         options: {
             headers: {
@@ -31,7 +37,8 @@ export default class Inventory extends Component {
     getInventory = () => {
         const { API_URL, options } = this.state;
 
-        axios.get(`${API_URL}/inventory`, options).then(response => {
+        axios.get(`${API_URL}/inventory`, options)
+        .then(response => {
             this.setState({
                 isLoading: false,
                 inventory: response.data.items,
@@ -46,12 +53,14 @@ export default class Inventory extends Component {
         promise
             .then(response => {
                 console.log(response);
+                this.alert({type: 'success', msg: response.data.success})
                 this.getInventory();
                 this.hideModal();
                 return;
             })
             .catch(error => {
                 console.log(error.message, error.response.data);
+                this.alert({type: 'error', msg: error.response.data.error})
                 return;
             })
     }
@@ -105,6 +114,21 @@ export default class Inventory extends Component {
         })
     }
 
+    alert = (alert) => {
+        console.log(alert.msg)
+        this.setState({
+            showAlert: true,
+            alert: alert
+        }, () => {
+            setTimeout(() => {
+                console.log('hide message')
+                this.setState({
+                    showAlert: false,
+                })
+            }, 2000)
+        })
+    }
+
     renderModal = () => {
         return (
             <div className='Inventory__Modal-Container'>
@@ -140,6 +164,7 @@ export default class Inventory extends Component {
                         )      
                     })}
                 </div>
+                <Alert show={this.state.showAlert} alert={this.state.alert} />
             </div>
         );
     }
