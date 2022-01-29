@@ -19,15 +19,15 @@ exports.addIngredientUsed = (req, res) => {
     .then(results => {
         const inventory = [...results];
         const ingredientUsed = req.body;
-        const check = '';
+        let check = '';
         
         // create array to add list of ingredient either not found or not enough stock
         const item = inventory.find(item => item.name === ingredientUsed.name && item.unit === ingredientUsed.unit);
-        if (!item) check = `${ingredient.name} is not found`;
-        else if (item.qty < ingredientUsed.amount) check = `You are short ${item.name} by ${ingredient.amount - item.qty} ${item.unit}`;
+        if (!item) check = `${ingredientUsed.name} is not found`;
+        else if (item.qty < ingredientUsed.amount) check = `You are short ${item.name} by ${ingredientUsed.amount - item.qty} ${item.unit}`;
         
         // if any keys added, throw error
-        if (checkArray.length !== 0) throw {status: 400, error: checkArray.join(', ')};
+        if (check) throw {status: 400, error: check};
 
         return knex.transaction(trx => {
             ingredientUsed.user_id = userID;
@@ -74,35 +74,45 @@ exports.deleteIngredientUsed = (req, res) => {
         const ingredientUsed = {...results[0][0]};
         const inventory = [...results[1]];
 
-        const promise;
+        let promise;
         const item = inventory.find(item => item.name === ingredientUsed.name && item.unit === ingredientUsed.unit);
         
         return knex.transaction(trx => {
-            if (!item) {
-                item = {...ingredientUsed};
-                item.qty = item.amount;
-                delete item.amount;
-                delete item.id;
-                delete item.batch_id;
-                promise = knex('inventory').insert(item).transacting(trx);
-            } else {
-                item.qty += ingredientUsed.amount;
-                promise = knex('inventory').where({id: item.id}).update(item).transacting(trx);
-            }
-            return promise;
+            knex('ingredients_used').where({id: ingredientUsedID, user_id: userID}).del().transacting(trx)
+            .then(data => {
+                if (!data) throw {status: 400, error: 'Could not find ingredient'};
+                if (!item) {
+                    item = {...ingredientUsed};
+                    item.qty = item.amount;
+                    delete item.amount;
+                    delete item.id;
+                    delete item.batch_id;
+                    promise = knex('inventory').insert(item).transacting(trx);
+                } else {
+                    item.qty += ingredientUsed.amount;
+                    promise = knex('inventory').where({id: item.id}).update(item).transacting(trx);
+                }
+                return promise
+            })
+            .then(trx.commit)
+            .catch(error => {
+                console.log(error)
+                trx.rollback(error);
+            })
         })
         .then(() => {
-            return knex('ingredients_used').where({id: ingredientUsedID, user_id: userID}).del().transacting(trx);
+            // if success, send status and message
+            res.status(200).json({success: 'Ingredient Deleted'})
         })
-        .then(trx.commit)
         .catch(error => {
-            console.log(error)
-            throw {status: 400, error: `Could not add batch: ${error.sqlMessage}`}
-            trx.rollback(error);
+            console.log(error);
+            if (error.status) throw error;
+            throw {status: 400, error: `Could not delete ingredient: ${error.sqlMessage}`}
         })
     })
     .catch(error => {
-
+        if (error.status) return res.status(error.status).json({error: error.error});
+        res.status(400).json({error: `Could not delete ingredient: ${error.sqlMessage}`});
     })
 
     

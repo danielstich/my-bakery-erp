@@ -139,7 +139,7 @@ exports.deleteBatch = (req, res) => {
         })
         .then(() => {
             // if success, send status and message
-            res.status(200).json({success: 'Batch Delete'})
+            res.status(200).json({success: 'Batch Deleted'})
         })
         .catch(error => {
             if (error.status) throw error;
@@ -148,6 +148,6 @@ exports.deleteBatch = (req, res) => {
     })
     .catch(error => {
         if (error.status) return res.status(error.status).json({error: error.error});
-        res.status(400).json({error: `Could not add batch: ${error.sqlMessage}`});
+        res.status(400).json({error: `Could not delete batch: ${error.sqlMessage}`});
     })
 }

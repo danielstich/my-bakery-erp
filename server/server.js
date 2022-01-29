@@ -3,6 +3,7 @@ const cors = require('cors');
 const UsersRouter = require('./Routers/UsersRouter');
 const InventoryRouter = require('./Routers/InventoryRouter');
 const IngredientsRouter = require('./Routers/IngredientsRouter');
+const IngredientsUsedRouter = require('./Routers/IngredientsUsedRouter');
 const RecipesRouter = require('./Routers/RecipesRouter');
 const BatchesRouter = require('./Routers/BatchesRouter');
 
@@ -20,6 +21,7 @@ app.use('/inventory', InventoryRouter)
 app.use('/ingredients', IngredientsRouter)
 app.use('/recipes', RecipesRouter);
 app.use('/batches', BatchesRouter);
+app.use('/ingredients_used', IngredientsUsedRouter)
 
 
 
