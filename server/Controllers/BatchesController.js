@@ -33,7 +33,7 @@ exports.addBatch = (req, res) => {
         ingredients.forEach(ingredient => {
             const item = inventory.find(item => item.name === ingredient.name && item.unit === ingredient.unit);
             if (!item) return checkObject.push(`${ingredient.name} is not found`);
-            if (item.qty < ingredient.amount * req.body.qty) checkObject[item.name] = `You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty} ${item.unit}`;
+            if (item.qty < ingredient.amount * req.body.qty) checkObject.push(`You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty} ${item.unit}`);
         })
         
         // if any keys added, throw error
