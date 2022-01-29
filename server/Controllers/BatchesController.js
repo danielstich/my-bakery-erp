@@ -3,20 +3,21 @@ const { getAllItemsHandler, getItemHandler } = require('./ResponseHandler');
 
 // get all batches
 exports.getAllBatches = (req, res) => {
-    const promise = knex('batches').select('id', 'date', 'qty', 'recipe_id').where({user_id: req.user.id});
+    const promise = knex('batches').select('name', 'id', 'date', 'qty', 'recipe_id').where({user_id: req.user.id});
     getAllItemsHandler(res, promise, 'Batches');
 }
 
 // get one batch
 exports.getBatch = (req, res) => {
     const selection = {id: req.params.id, user_id: req.user.id};
-    const promise = knex('batches').select('id', 'date', 'qty', 'recipe_id').where(selection);
+    const promise = knex('batches').select('name', 'id', 'date', 'qty', 'recipe_id').where(selection);
     getItemHandler(res, promise, 'batch');
 }
 
 // add new batch
 exports.addBatch = (req, res) => {
     // get promises for inventory and ingredients
+    console.log(req.body, req.user)
     const ingredientsPromise = knex('ingredients').where({recipe_id: req.body.recipe_id, user_id: req.user.id});
     const inventoryPromise = knex('inventory').where({user_id: req.user.id});
 
@@ -30,7 +31,7 @@ exports.addBatch = (req, res) => {
         ingredients.forEach(ingredient => {
             const item = inventory.find(item => item.name === ingredient.name && item.unit === ingredient.unit);
             if (!item) return checkObject[item.name] = `${item.name} is not found`;
-            if (item.qty < ingredient.amount * req.body.qty) checkObject[item.name] = `You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty}`;
+            if (item.qty < ingredient.amount * req.body.qty) checkObject[item.name] = `You are short ${item.name} by ${ingredient.amount * req.body.qty - item.qty} ${item.unit}`;
         })
         
         // if any keys added, throw error
@@ -76,14 +77,16 @@ exports.addBatch = (req, res) => {
             res.status(200).json({success: 'Batch Added'})
         })
         .catch(error => {
+            console.log(error)
             if (error.status) throw error;
             throw {status: 400, error: `Could not add batch: ${error.sqlMessage}`}
         })
     })
     .catch(error => {
+        console.log(error)
         if (error.checkObject) return res.status(error.status).json({error: error.checkObject});
         if (error.status) return res.status(error.status).json({error: error.error});
-        res.status(400).json({error: `Could not add batch: ${error.sqlMessage}`});
+        res.status(400).json({error: `Could not add batch: ${error.sqlMessage ? error.sqlMessage : error}`});
     })
 }
 

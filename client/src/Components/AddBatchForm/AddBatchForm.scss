@@ -1,27 +1,7 @@
 @use '../../Styles/mixins' as *;
 @use '../../Styles/variables' as *;
 
-.Recipe-Modal {
-    background-color: rgba($color: white, $alpha: 0.85);
-    position: fixed;
-    height: 100vh;
-    width: 100vw;
-    top: 0;
-    right: 0;
-    z-index: 3;
-    @include flex-center;
-
-    @include desktop {
-        height: auto;
-        width: auto;
-        top: 1.5rem;
-        right: -27rem;
-        position: absolute;
-        background-color: transparent;
-        align-items: flex-start;
-        justify-content: flex-end;
-    }
-
+.Add-Batch {
     &__Title {
         @include subtitles;
         margin: 0;

@@ -14,11 +14,11 @@ export default function Toolbar() {
                 Inventory
             </Link>
             <Link className='Toolbar__Link' to='/home/recipes'>
-                <img className='Toolbar__Icon' src={recipesIcon} alt="clipboard icon" />
+                <img className='Toolbar__Icon' src={recipesIcon} alt="reciped book" />
                 Recipes
             </Link>
-            <Link className='Toolbar__Link' to='/home/inventory'>
-                <img className='Toolbar__Icon' src={kitchenIcon} alt="clipboard icon" />
+            <Link className='Toolbar__Link' to='/home/batches'>
+                <img className='Toolbar__Icon' src={kitchenIcon} alt="kitchen icon" />
                 Kitchen
             </Link>
             <Link className='Toolbar__Link' to='/home/inventory'>

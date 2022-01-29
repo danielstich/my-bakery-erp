@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
 import './RecipeModal.scss';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg';
 import deleteIcon from '../../Assets/Icons/delete.svg';
 import Ingredients from '../Ingredients/Ingredients';
+import AddBatchForm from '../AddBatchForm/AddBatchForm';
 
-export default function RecipeModal({ recipe, onChangeHandler, onSubmitHandler, hideModal, deleteRecipe, type }) {
-    const renderIngredients = () => {
-        return (
-            <Ingredients hideModal={hideModal} recipe={recipe} />
-        )
-    }
+export default function RecipeModal({ recipe, onSubmitBatch, onChangeHandler, onChangeBatchHandler, onSubmitHandler, hideModal, deleteRecipe, type }) {
+    
+    const renderIngredients = <Ingredients 
+        hideModal={hideModal} 
+        recipe={recipe} />  
+
+    const renderBatchInput = <AddBatchForm 
+            onSubmitBatch={onSubmitBatch} 
+            recipe={recipe}
+            onChangeBatchHandler={onChangeBatchHandler}
+            hideModal={hideModal} />
 
     const renderInput = () => {
         const submitRecipe = recipe.id ? ((event) => {onSubmitHandler(event, recipe.id)}) : onSubmitHandler;
@@ -39,7 +44,7 @@ export default function RecipeModal({ recipe, onChangeHandler, onSubmitHandler, 
                     placeholder='Recipe Description'
                     onChangeHandler={onChangeHandler}
                 />
-                <Button extraClasses='Button Button--EditItem' type="submit" label={recipe.id ? 'Edit Item' : 'Add Item'}/>
+                <Button extraClasses='Button--EditItem' type="submit" label={recipe.id ? 'Edit Item' : 'Add Item'}/>
                 <div className='Recipe-Modal__Icon-Container'>
                     <img className='Recipe-Modal__Icon' onClick={() => hideModal(recipe)} src={closeIcon} alt="" />      
                     {recipe.id ? <img className='Recipe-Modal__Icon' src={deleteIcon} alt='delete' onClick={() => deleteRecipe(recipe.id)} /> : <></>}
@@ -50,9 +55,10 @@ export default function RecipeModal({ recipe, onChangeHandler, onSubmitHandler, 
     }
     return (
         <div className='Recipe-Modal'>
-            {(type === 'ingredients') && renderIngredients()}
+            {(type === 'ingredients') && renderIngredients}
             {(type === 'add') && renderInput()}
             {(type === 'edit') && renderInput()}
+            {(type === 'batch') && renderBatchInput}
         </div>
     )
     

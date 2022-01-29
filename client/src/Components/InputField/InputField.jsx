@@ -1,7 +1,7 @@
 import React from 'react';
 import './InputField.scss'
 
-export default function InputField({ name, label, type, extraClasses, value, placeholder, onChangeHandler }) {
+export default function InputField({ name, disabled, label, type, extraClasses, value, placeholder, onChangeHandler }) {
     return (
         <div className='Input'>
             <label className='Input__Label' htmlFor={name}>{label}</label>
@@ -13,7 +13,9 @@ export default function InputField({ name, label, type, extraClasses, value, pla
                 value={value}
                 placeholder={placeholder}
                 onChange={onChangeHandler}
+                min='0'
                 autoComplete="off"
+                disabled={disabled}
             />
         </div>
     );

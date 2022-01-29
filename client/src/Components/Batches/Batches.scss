@@ -1,7 +1,7 @@
 @use '../../Styles/mixins' as *;
 @use '../../Styles/variables' as *;
 
-.Inventory {
+.Batches {
     @include padding;
     position: relative;
     display: flex;
@@ -24,24 +24,13 @@
         margin: 0;
     }
 
-    &__Items {
+    &__List {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
 
         @include desktop {
             width: 50%;
-        }
-    }
-
-    &__Items-Container {
-        position: relative;
-
-        &:last-child {
-            margin-bottom: 8rem;
-            @include tablet {
-                margin-bottom: 0;
-            }
         }
     }
 
@@ -103,6 +92,55 @@
             width: 48px;
             height: 0;
             border: 0.5px dashed grey;
+        }
+    }
+}
+
+.Batch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px grey dashed;
+    border-radius: 10px;
+    padding: 0.75rem;
+    background-color: $background-color-4;
+    position: relative;
+
+    &:last-child {
+        margin-bottom: 8rem;
+        @include tablet {
+            margin-bottom: 0;
+        }
+    }
+
+    &__Container {
+        width: 35%;
+    }
+
+    &__Date {
+        @include body;
+        margin: 0;
+    }
+
+    &__Title {
+        @include body;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    &__Body {
+        @include body;
+        margin: 0;
+        font-weight: 500;
+        align-self: flex-end;
+    }
+
+    &__Icon {
+        height: 1.5rem;
+        cursor: pointer;
+        align-self: center;
+        &--delete {
+            margin-left: auto;
         }
     }
 }
