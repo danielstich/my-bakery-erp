@@ -1,6 +1,5 @@
 import React from 'react';
 import './BatchModal.scss';
-import AddBatchForm from '../AddBatchForm/AddBatchForm';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg';

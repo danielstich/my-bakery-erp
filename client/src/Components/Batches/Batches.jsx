@@ -20,11 +20,29 @@ export default class Batches extends Component {
             }
         }
     }
+
+    responseHandler = promise => {
+        promise
+            .then(response => {
+                this.getBatches();
+                this.hideModal();
+                return;
+            })
+            .catch(error => {
+                console.log(error.message, error.response);
+                return;
+            })
+    }
+
     getBatches = () => {
         const { API_URL, options } = this.state;
         axios.get(`${API_URL}/batches`, options)
             .then(response => {
-                const batches = response.data.Batches.reverse();
+                const batches = response.data.Batches.sort((a,b) => {
+                    if (a.date > b.date) return -1;
+                    if (a.date < b.date) return 1;
+                    return 0;
+                });
                 this.setState({
                     batches,
                     currentBatch: {...batches[0]}
@@ -74,8 +92,19 @@ export default class Batches extends Component {
         this.setState({currentBatch :batch})
     }
 
-    onSubmitBatch = () => {
-        console.log(this.state.currentBatch)
+    onSubmitBatch = (event) => {
+        event.preventDefault();
+        const { API_URL, options } = this.state;
+        const newBatch = {...this.state.currentBatch};
+        newBatch.recipe_id = this.state.currentRecipe.id;
+        const promise = axios.post(`${API_URL}/batches`, newBatch, options);
+        this.responseHandler(promise);
+    }
+
+    deleteBatch = (id) => {
+        const { API_URL, options } = this.state;
+        const promise = axios.delete(`${API_URL}/batches/${id}`, options)
+        this.responseHandler(promise);
     }
 
     onRecipeChangeHandler = (event) => {
@@ -119,7 +148,7 @@ export default class Batches extends Component {
                                 <p className='Batch__Title'>{batch.name} made:</p>
                             </div>
                             <p className='Batch__Body'>{batch.qty.toString().padStart(3, '0')}</p>
-                            <img onClick={() => {}} className='Batch__Icon Batch__Icon--delete' src={deleteIcon} alt="" />                            
+                            <img onClick={() => this.deleteBatch(batch.id)} className='Batch__Icon Batch__Icon--delete' src={deleteIcon} alt="" />                            
                         </div>
                     )
                 })}
