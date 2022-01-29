@@ -15,17 +15,9 @@ export default function BatchModal({ recipes, recipe, onSubmitBatch, onRecipeCha
             <select className='Batch-Modal__Select' onChange={onRecipeChangeHandler}>
                 <option className='Batch-Modal__Option' selected value="none" disabled>Please Select a Recipe:</option>
                 {recipes.map(recipe => {
-                    return <option className='Batch-Modal__Option' onChange={() => onRecipeChangeHandler(recipe)} key={recipe.id} value={recipe.id}>{recipe.name}</option>
+                    return <option className='Batch-Modal__Option' key={recipe.id} value={recipe.id}>{recipe.name}</option>
                 })}
             </select>
-            <InputField 
-                label='Batch Name'
-                type='text'
-                name='name'
-                id='name'
-                placeholder={recipe.name}
-                onChangeHandler={onChangeHandler}
-            />
             <InputField 
                 label='Date'
                 type='date'

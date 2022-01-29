@@ -21,6 +21,10 @@ export default class Batches extends Component {
         }
     }
 
+    componentDidMount() {
+        this.getBatches();
+    }
+
     responseHandler = promise => {
         promise
             .then(response => {
@@ -63,8 +67,19 @@ export default class Batches extends Component {
             })
     }
 
-    componentDidMount() {
-        this.getBatches();
+    onSubmitBatch = (event) => {
+        event.preventDefault();
+        const { API_URL, options } = this.state;
+        const newBatch = {...this.state.currentBatch};
+        newBatch.recipe_id = this.state.currentRecipe.id;
+        const promise = axios.post(`${API_URL}/batches`, newBatch, options);
+        this.responseHandler(promise);
+    }
+
+    deleteBatch = (id) => {
+        const { API_URL, options } = this.state;
+        const promise = axios.delete(`${API_URL}/batches/${id}`, options)
+        this.responseHandler(promise);
     }
 
     addModal = () => {
@@ -92,27 +107,14 @@ export default class Batches extends Component {
         this.setState({currentBatch :batch})
     }
 
-    onSubmitBatch = (event) => {
-        event.preventDefault();
-        const { API_URL, options } = this.state;
-        const newBatch = {...this.state.currentBatch};
-        newBatch.recipe_id = this.state.currentRecipe.id;
-        const promise = axios.post(`${API_URL}/batches`, newBatch, options);
-        this.responseHandler(promise);
-    }
-
-    deleteBatch = (id) => {
-        const { API_URL, options } = this.state;
-        const promise = axios.delete(`${API_URL}/batches/${id}`, options)
-        this.responseHandler(promise);
-    }
-
     onRecipeChangeHandler = (event) => {
         const recipeID = parseInt(event.target.value);
         const recipe = this.state.recipes.find(recipe => recipe.id === recipeID);
-        console.log(recipe, recipeID)
+        const batch = {...this.state.currentBatch};
+        batch.name = recipe.name;
         this.setState({
-            currentRecipe: recipe
+            currentRecipe: recipe,
+            currentBatch: batch
         })
     }
 

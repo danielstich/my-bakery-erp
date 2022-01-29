@@ -150,6 +150,11 @@ export default class Recipes extends Component {
             showAddModal: false,
             showIngredients: false,
             showBatches: true,
+            currentBatch: {
+                name: recipe.name,
+                date: null,
+                qty: null
+            }
         })
     }
 

@@ -14,8 +14,10 @@ export default function AddBatchForm( { onSubmitBatch, recipe, onChangeBatchHand
                 type='text'
                 name='name'
                 id='name'
-                placeholder={recipe.name}
+                value={recipe.name}
                 onChangeHandler={onChangeBatchHandler}
+                disabled={true}
+                
             />
             <InputField 
                 label='Date'

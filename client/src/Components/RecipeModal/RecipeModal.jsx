@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import './RecipeModal.scss';
 import InputField from '../InputField/InputField';
 import Button from '../Button/Button';
@@ -56,7 +55,7 @@ export default function RecipeModal({ recipe, onSubmitBatch, onChangeHandler, on
     }
     return (
         <div className='Recipe-Modal'>
-            {(type === 'ingredients') && renderIngredients()}
+            {(type === 'ingredients') && renderIngredients}
             {(type === 'add') && renderInput()}
             {(type === 'edit') && renderInput()}
             {(type === 'batch') && renderBatchInput}
