@@ -14,7 +14,4 @@ router.route('/:id')
     .get(getBatch)
     .delete(deleteBatch)
 
-router.route('/:id/ingredients')
-    .get(getIngredientsUsed);
-
 module.exports = router;
