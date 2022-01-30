@@ -5,6 +5,7 @@ import Button from '../../Components/Button/Button';
 import './Signup.scss'
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
 import { Redirect } from 'react-router-dom';
+import Alert from '../../Components/Alert/Alert';
 
 export default class Signup extends Component {
     state = {
@@ -13,9 +14,12 @@ export default class Signup extends Component {
             email: '',
             password: ''
         },
+        showAlert: false,
+        alert: {
+            type: '',
+            msg: ''
+        },
         isSuccess: false,
-        isError: false,
-        errorMessage: ''
     }
 
     onChangeHandler = (event) => {
@@ -33,20 +37,30 @@ export default class Signup extends Component {
     submitForm = () => {
         axios.post('http://localhost:8080/users/signup', this.state.user)
             .then(response => {
-                console.log(response)
+                this.alert({type: 'success', msg: response.data.success})
                 this.setState({isSuccess: true})
             })
             .catch(error => {
                 console.log(error.response.data.error)
-                this.setState({
-                    isError: true,
-                    errorMessage: error.response.data.error
-                })
+                this.alert({type: 'error', msg: error.response.data.error})
             })
     }
 
+    alert = (alert) => {
+        this.setState({
+            showAlert: true,
+            alert: alert
+        }, () => {
+            setTimeout(() => {
+                this.setState({
+                    showAlert: false,
+                })
+            }, 2000)
+        })
+      }
+
     render() {
-        if (this.state.isSuccess) return <Redirect to={{pathname:'/', alert:''}} />
+        if (this.state.isSuccess) return <Redirect to={{pathname:'/home', state: this.state.alert}} />
         return (
             <div className='Signup'>
                 <div className='Signup__Container'>
@@ -83,8 +97,8 @@ export default class Signup extends Component {
                             onClickHandler={this.submitForm}
                             extraClasses='Button--Signup'/>                           
                     </form>
-                    {this.state.isError && <p className='Signup__Error'>{this.state.errorMessage}</p>}
                 </div>
+                <Alert show={this.state.showAlert} alert={this.state.alert} />
             </div>
         );
     }

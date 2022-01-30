@@ -11,8 +11,8 @@ function App() {
     <Router>
       <div className="App">
         <Switch>
-          <Redirect from='/' exact to='home' />
-          <Route path='/home' component={Home}/>
+          <Redirect from='/' exact to='/home' />
+          <Route path='/home' render={(props) => <Home {...props} />}/>
           <Route path='/Styles' exact component={Styles}/>
           <Route path='/Signup' exact component={Signup}/>
           <Route path='/Login' exact component={Login} />

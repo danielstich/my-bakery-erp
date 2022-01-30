@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
     knex('users')
         .insert(newUser)
         .then(data => {
-            return res.status(200).json(data)
+            return res.status(200).json({success: `Welcome ${newUser.name}`, user: data})
         })
         .catch(error => {
             console.log(error.code)

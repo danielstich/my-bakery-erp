@@ -1,0 +1,33 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Landing {
+    @include padding;
+    @include tablet {
+        margin: 0 auto;
+        width: 75%;
+    }
+
+    @include desktop {
+        width: 50%;
+    }
+    &__Subtitle {
+        @include subtitles;
+    }
+
+    &__Title {
+        @include titles;
+    }
+
+    &__Body {
+        @include body;
+    }
+
+    &__List {
+    }
+
+    &__Item {
+        list-style-type: circle;
+        @include body;
+    }
+}
