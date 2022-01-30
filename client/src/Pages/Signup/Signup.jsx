@@ -77,18 +77,11 @@ export default class Signup extends Component {
                             value={this.state['password']}
                             placeholder='Please Enter Your Password'
                             onChangeHandler={this.onChangeHandler}/>
-                        <div className='Signup__Btn-Container'>
-                            <Button
-                                type={'button'}
-                                label={'Cancel'}
-                                onClickHandler={this.closeForm}
-                                extraClasses='Button--Cancel'/>
-                            <Button
-                                type={'button'}
-                                label={'Sign Up'}
-                                onClickHandler={this.submitForm}
-                                extraClasses=''/>
-                        </div>
+                        <Button
+                            type={'button'}
+                            label={'Sign Up'}
+                            onClickHandler={this.submitForm}
+                            extraClasses='Button--Signup'/>                           
                     </form>
                     {this.state.isError && <p className='Signup__Error'>{this.state.errorMessage}</p>}
                 </div>
