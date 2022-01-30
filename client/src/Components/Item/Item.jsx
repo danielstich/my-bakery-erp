@@ -9,8 +9,10 @@ export default function Item(props) {
     <div key={item.id} className='Item'>
         <h3 className='Item__Title'>{item.name}</h3>
         <p className='Item__Body'>{item.qty ? item.qty : item.amount} {item.unit}</p>
-        <img onClick={() => editModal(item)} className='Item__Icon Item__Icon--edit' src={editIcon} alt="" />
-        <img onClick={() => deleteItem(item.id)} className='Item__Icon' src={deleteIcon} alt="" />
+        {editModal ? 
+        <img onClick={() => editModal(item)} className='Item__Icon Item__Icon--last' src={editIcon} alt="" /> :
+        <></>}
+        <img onClick={() => deleteItem(item.id)} className={editModal ? 'Item__Icon' : 'Item__Icon Item__Icon--last'} src={deleteIcon} alt="" />
     </div>
     );
 }

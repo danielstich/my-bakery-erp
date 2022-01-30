@@ -1,10 +1,16 @@
 import React from 'react';
 import './BatchModal.scss';
 import InputField from '../InputField/InputField';
+import IngredientsUsed from '../IngredientsUsed/IngredientsUsed';
 import Button from '../Button/Button';
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg';
 
-export default function BatchModal({ recipes, recipe, onSubmitBatch, onRecipeChangeHandler, onChangeHandler, hideModal, type }) {
+export default function BatchModal({ alertHandler, batch, recipes, recipe, onSubmitBatch, onRecipeChangeHandler, onChangeHandler, hideModal, type }) {
+
+    const renderIngredients = <IngredientsUsed
+        alertHandler={alertHandler} 
+        hideModal={hideModal} 
+        batch={batch} />  
 
     const addBatchForm = 
         <div>
@@ -44,6 +50,7 @@ export default function BatchModal({ recipes, recipe, onSubmitBatch, onRecipeCha
     return (
         <div className='Batch-Modal'>
             {type === 'add' && addBatchForm}
+            {type === 'ingredients' && renderIngredients}
         </div>
     );
 }
