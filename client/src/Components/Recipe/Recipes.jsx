@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Recipes.scss';
 import editIcon from '../../Assets/Icons/edit.svg';
 import addIcon from '../../Assets/Icons/add.svg';
-import listIcon from '../../Assets/Icons/list.svg'
+import listIcon from '../../Assets/Icons/list.svg';
 import RecipeModal from '../RecipeModal/RecipeModal';
 import countertopIcon from '../../Assets/Icons/countertop.svg';
 

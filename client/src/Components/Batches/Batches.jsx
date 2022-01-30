@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Batches.scss'
 import deleteIcon from '../../Assets/Icons/delete.svg';
 import addIcon from '../../Assets/Icons/add.svg';
+import listIcon from '../../Assets/Icons/list.svg'
 import BatchModal from '../BatchModal/BatchModal';
 
 export default class Batches extends Component {
@@ -10,6 +11,7 @@ export default class Batches extends Component {
         isLoading: true,
         batches: [],
         recipes: [],
+        type: '',
         currentRecipe: {},
         currentBatch: {},
         showAddModal: false,
@@ -82,9 +84,11 @@ export default class Batches extends Component {
         this.responseHandler(promise);
     }
 
-    addModal = () => {
+    addModal = (modalType) => {
         this.setState({
             showAddModal: true,
+            showIngredientModal: false,
+            type: modalType,
             currentBatch: {
                 name: '',
                 date: null,
@@ -93,9 +97,19 @@ export default class Batches extends Component {
         })
     }
 
+    showIngredientModal = (modalType, batch) => {
+        this.setState({
+            showAddModal: false,
+            showIngredientModal: true,
+            type: modalType,
+            currentBatch: batch
+        })
+    }
+
     hideModal = () => {
         let newState = {
-            showAddModal: false
+            showAddModal: false,
+            showIngredientModal: false
         };
         this.setState(newState)
     }
@@ -118,14 +132,15 @@ export default class Batches extends Component {
         })
     }
 
-    renderModal = (type) => {
+    renderModal = () => {
         return (
             <BatchModal
             alertHandler={this.props.alertHandler}
-            type={type}
+            type={this.state.type}
             onRecipeChangeHandler={this.onRecipeChangeHandler}
             recipes={this.state.recipes}
             recipe={this.state.currentRecipe}
+            batch={this.state.currentBatch}
             onChangeHandler={this.onChangeHandler}
             onSubmitBatch={this.onSubmitBatch}
             hideModal={this.hideModal}
@@ -139,7 +154,7 @@ export default class Batches extends Component {
         <div className='Batches'>
             <div className='Batches__Header'>
                 <h1 className='Batches__Title'>Batches</h1>
-                <img onClick={this.addModal} className='Batches__Add-Icon' src={addIcon} alt="add button" />
+                <img onClick={() => this.addModal('add')} className='Batches__Add-Icon' src={addIcon} alt="add button" />
                 {this.state.showAddModal && this.renderModal('add')}
             </div>
             <div className='Batches__List'>
@@ -151,7 +166,9 @@ export default class Batches extends Component {
                                 <p className='Batch__Title'>{batch.name} made:</p>
                             </div>
                             <p className='Batch__Body'>{batch.qty.toString().padStart(3, '0')}</p>
+                            {this.state.showIngredientModal && this.state.currentBatch.id === batch.id && this.renderModal('add')}
                             <img onClick={() => this.deleteBatch(batch.id)} className='Batch__Icon Batch__Icon--delete' src={deleteIcon} alt="" />                            
+                            <img onClick={() => this.showIngredientModal('ingredients',batch)} className='Recipe__Icon' src={listIcon} alt="" />
                         </div>
                     )
                 })}
