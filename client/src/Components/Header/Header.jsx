@@ -37,14 +37,15 @@ export default class Header extends Component {
                         src={this.state.navIsVisible ? openMenu : menu} 
                         alt="crescent logo" />
                     <div className='Header__Nav Header__Nav--tablet'>
-                        <Link className='Header__Link' to='/Signup' >Sign Up</Link>
-                        <Link className='Header__Link' to='/Login' >Login</Link>
+                        {!this.props.isLoggedIn && <Link onClick={this.hideMenu} className='Header__Link' to='/Signup' >Sign Up</Link>}
+                        {!this.props.isLoggedIn && <Link onClick={this.hideMenu} className='Header__Link' to='/Login' >Login</Link>}
+                        {this.props.isLoggedIn && <p onClick={this.props.logout} className='Header__Link Header__Link--Logout'>Log Out</p>}
                     </div>
                 </div>
                 <div className={this.state.navClass}>
-                    <Link className='Header__Link' to='/home'>Home</Link>
-                    <Link className='Header__Link' to='/Signup' >Sign Up</Link>
-                    <Link className='Header__Link' to='/Login' >Login</Link>
+                    {!this.props.isLoggedIn && <Link onClick={this.hideMenu} className='Header__Link' to='/Signup' >Sign Up</Link>}
+                    {!this.props.isLoggedIn && <Link onClick={this.hideMenu} className='Header__Link' to='/Login' >Login</Link>}
+                    {this.props.isLoggedIn && <p onClick={this.props.logout} className='Header__Link Header__Link--Logout'>Log Out</p>}
                 </div>
             </div>
         )

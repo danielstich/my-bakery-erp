@@ -26,6 +26,7 @@
 
     &__Icon {
         height: 2.5rem;
+        cursor: pointer;
         &--logo {
             @include tablet {
                 margin-right: 1.5rem;
@@ -95,6 +96,11 @@
             &:active {
                 background-color: transparent;
             }
+        }
+
+        &--Logout {
+            margin: 0;
+            cursor: pointer;
         }
 
         @include tablet {

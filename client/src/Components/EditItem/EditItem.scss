@@ -2,20 +2,25 @@
 @use '../../Styles/variables' as *;
 
 .EditItem {
-    @include flex-center;
-
     @include desktop {
-        width: auto;
+        width: 100%;
         height: 100%;
         position: relative;
         background-color: transparent;
         align-items: flex-start;
     }
 
+    &__Title {
+        @include subtitles;
+        margin: 0;
+        margin-bottom: 1rem;
+    }
+
     &__Form {
         border-radius: 20px;
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 0.5rem;
 
         @include desktop {
@@ -25,6 +30,7 @@
     }
 
     &__Icon-Container {
+        width: 100%;
         display: flex;
         justify-content: space-evenly;
     }
