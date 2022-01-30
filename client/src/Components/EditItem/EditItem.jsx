@@ -14,6 +14,7 @@ export default function EditItem(props) {
 
     return (
         <div className='EditItem'>
+            <h1 className='EditItem__Title'>{item.name ? item.name : 'Add Item'}:</h1>
             <form 
                 className='EditItem__Form' 
                 onSubmit={submitItem}>
