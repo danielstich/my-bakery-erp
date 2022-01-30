@@ -27,7 +27,7 @@ export default function AddBatchForm( { onSubmitBatch, recipe, onChangeBatchHand
                 onChangeHandler={onChangeBatchHandler}
             />
             <InputField 
-                label='Quantity'
+                label='Number of Batches'
                 type='number'
                 name='qty'
                 id='qty'

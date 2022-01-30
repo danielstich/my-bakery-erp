@@ -45,6 +45,15 @@ export default function RecipeModal({ recipe, alertHandler, onSubmitBatch, onCha
                     placeholder='Recipe Description'
                     onChangeHandler={onChangeHandler}
                 />
+                <InputField 
+                    label='Number of Items'
+                    type='number'
+                    name='qty'
+                    id='qty'
+                    value={recipe ? recipe.qty : ''}
+                    placeholder='Quantity'
+                    onChangeHandler={onChangeHandler}
+                />
                 <Button extraClasses='Button--EditItem' type="submit" label={recipe.id ? 'Edit Item' : 'Add Item'}/>
                 <div className='Recipe-Modal__Icon-Container'>
                     <img className='Recipe-Modal__Icon' onClick={() => hideModal(recipe)} src={closeIcon} alt="" />      

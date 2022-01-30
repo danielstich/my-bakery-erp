@@ -120,6 +120,7 @@ export default class Recipes extends Component {
             currentRecipe: {
                 name: '',
                 description: '',
+                qty: null,
             }
         })
     }
@@ -189,9 +190,10 @@ export default class Recipes extends Component {
                             return (
                                 <div className='Recipe' key={recipe.id}>
                                     <div className='Recipe__Label-Container'>
-                                        <h3 className='Recipe__Title'>{recipe.name}</h3>
+                                        <h3 className='Recipe__Title'>{recipe.name}<p className='Recipe__Body Recipe__Body--Qty'>x {recipe.qty}</p></h3>
                                         <p className='Recipe__Body'>{recipe.description}</p>
                                     </div>
+                                    
                                     {this.state.showEditModal && (this.state.currentRecipe.id === recipe.id) && this.renderModal('edit')}
                                     {this.state.showIngredients && (this.state.currentRecipe.id === recipe.id) && this.renderModal('ingredients')}
                                     {this.state.showBatches && (this.state.currentRecipe.id === recipe.id) && this.renderModal('batch')}

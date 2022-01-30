@@ -159,13 +159,14 @@ export default class Batches extends Component {
             </div>
             <div className='Batches__List'>
                 {!this.state.isLoading && this.state.batches.map(batch => {
+                    const recipeQty = this.state.recipes.find(recipe => recipe.id === batch.recipe_id).qty;
                     return (
                         <div className='Batch' key={batch.id}>
                             <div className='Batch__Container'>
                                 <p className='Batch__Date'>{(new Date(batch.date)).toDateString()}</p>
                                 <p className='Batch__Title'>{batch.name} made:</p>
                             </div>
-                            <p className='Batch__Body'>{batch.qty.toString().padStart(3, '0')}</p>
+                            <p className='Batch__Body'>{(batch.qty * recipeQty).toString().padStart(3, '0')}</p>
                             {this.state.showIngredientModal && this.state.currentBatch.id === batch.id && this.renderModal('add')}
                             <img onClick={() => this.deleteBatch(batch.id)} className='Batch__Icon Batch__Icon--delete' src={deleteIcon} alt="" />                            
                             <img onClick={() => this.showIngredientModal('ingredients',batch)} className='Recipe__Icon' src={listIcon} alt="" />

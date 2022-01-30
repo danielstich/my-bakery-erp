@@ -18,7 +18,8 @@ export default function BatchModal({ alertHandler, batch, recipes, recipe, onSub
             className='Add-Batch__Form'
             onSubmit={onSubmitBatch}>
             <h3 className='Add-Batch__Title'>Create Batch</h3>
-            <select className='Batch-Modal__Select' onChange={onRecipeChangeHandler}>
+            <label className='Input__Label Input__Label--Batch' htmlFor='select-field'>Choose a Recipe</label>
+            <select className='Batch-Modal__Select' id='select-field' onChange={onRecipeChangeHandler}>
                 <option className='Batch-Modal__Option' selected value="none" disabled>Please Select a Recipe:</option>
                 {recipes.map(recipe => {
                     return <option className='Batch-Modal__Option' key={recipe.id} value={recipe.id}>{recipe.name}</option>
@@ -32,7 +33,7 @@ export default function BatchModal({ alertHandler, batch, recipes, recipe, onSub
                 onChangeHandler={onChangeHandler}
             />
             <InputField 
-                label='Quantity'
+                label='Number of Batches'
                 type='number'
                 name='qty'
                 id='qty'

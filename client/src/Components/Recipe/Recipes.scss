@@ -95,6 +95,13 @@
     &__Body {
         @include body;
         margin: 0;
+
+        &--Qty {
+            display: inline-block;
+            font-weight: 400;
+            align-self: flex-start;
+            margin-left: 1rem;
+        }
     }
 
     &__Icon {
