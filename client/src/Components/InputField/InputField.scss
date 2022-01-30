@@ -7,6 +7,11 @@
 
     &__Label {
         @include labels;
+
+        &--Batch {
+            width: 15rem;
+            margin-bottom: -0.5rem;
+        }
     }
 
     &__Field {
