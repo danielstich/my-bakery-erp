@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.increments('id').primary();
         table.string('name').notNullable();
         table.string('description');
+        table.integer('qty');
         table.timestamp('update_at').defaultTo(knex.fn.now());
         table
             .integer('user_id')
