@@ -38,7 +38,7 @@ export default class Home extends Component {
         this.setState({
           isLoggedIn: true,
           isVerifying: false,
-          user: response.data
+          user: response.data.user
         })
       })
       .catch(error => {

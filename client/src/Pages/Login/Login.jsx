@@ -2,6 +2,7 @@ import { Component } from 'react';
 import axios from 'axios'
 import InputField from '../../Components/InputField/InputField'
 import Button from '../../Components/Button/Button';
+import Alert from '../../Components/Alert/Alert';
 import './Login.scss'
 import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
 import { Redirect } from 'react-router-dom';
@@ -13,8 +14,11 @@ export default class Login extends Component {
             password: ''
         },
         isSuccess: false,
-        isError: false,
-        errorMessage: ''
+        showAlert: false,
+        alert: {
+            type: '',
+            msg: ''
+        },
     }
 
     onChangeHandler = (event) => {
@@ -32,23 +36,32 @@ export default class Login extends Component {
     submitForm = () => {
         axios.post('http://localhost:8080/users/login', this.state.user)
             .then(response => {
-                console.log(response)
+                this.alert({type: 'success', msg: response.data.success})
                 sessionStorage.setItem('token', response.data.token)
                 this.setState({
                     isSuccess: true
                 })
             })
             .catch(error => {
-                console.log(error.response.data.error)
-                this.setState({
-                    isError: true,
-                    errorMessage: error.response.data.error
-                })
+                this.alert({type: 'error', msg: error.response.data.error})
             })
     }
 
+    alert = (alert) => {
+        this.setState({
+            showAlert: true,
+            alert: alert
+        }, () => {
+            setTimeout(() => {
+                this.setState({
+                    showAlert: false,
+                })
+            }, 2000)
+        })
+    }
+
     render() {
-        if (this.state.isSuccess) return <Redirect to={{pathname:'/', alert:''}} />
+        if (this.state.isSuccess) return <Redirect to={{pathname:'/home', state: this.state.alert}} />
         return (
             <div className='Login'>
                 <div className='Login__Container'>
@@ -77,8 +90,8 @@ export default class Login extends Component {
                             onClickHandler={this.submitForm}
                             extraClasses='Button--Login'/>
                     </form>
-                    {this.state.isError && <p className='Signup__Error'>{this.state.errorMessage}</p>}
                 </div>
+                <Alert show={this.state.showAlert} alert={this.state.alert} />
             </div>
         );
     }

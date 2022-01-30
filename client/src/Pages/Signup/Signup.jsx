@@ -57,7 +57,7 @@ export default class Signup extends Component {
                 })
             }, 2000)
         })
-      }
+    }
 
     render() {
         if (this.state.isSuccess) return <Redirect to={{pathname:'/home', state: this.state.alert}} />
