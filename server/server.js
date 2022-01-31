@@ -6,6 +6,7 @@ const IngredientsRouter = require('./Routers/IngredientsRouter');
 const IngredientsUsedRouter = require('./Routers/IngredientsUsedRouter');
 const RecipesRouter = require('./Routers/RecipesRouter');
 const BatchesRouter = require('./Routers/BatchesRouter');
+const TransactionRouter = require('./Routers/TransactionRouter');
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.use('/inventory', InventoryRouter)
 app.use('/ingredients', IngredientsRouter)
 app.use('/recipes', RecipesRouter);
 app.use('/batches', BatchesRouter);
-app.use('/ingredients_used', IngredientsUsedRouter)
+app.use('/ingredients_used', IngredientsUsedRouter);
+app.use('/transactions', TransactionRouter)
 
 
 
