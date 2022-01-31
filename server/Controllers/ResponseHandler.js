@@ -8,6 +8,7 @@ exports.getAllItemsHandler = (res, promise, itemType) => {
             res.status(200).json(responseObject);
         })
         .catch(error => {
+            console.log(error)
             res.status(400).json({error: `Could not find ${itemType}: ${error.sqlMessage}`})
         })
 }
