@@ -7,6 +7,12 @@
 
     @include tablet {
         display: flex;
+        gap: 2rem;
+        padding: 0;
+    }
+
+    @include desktop {
+        display: flex;
         flex-direction: column;
         justify-content: flex-start;
         gap: 1rem;
@@ -26,6 +32,19 @@
         background-color: $success-color;
 
         @include tablet {
+            display: flex;
+            flex-direction: row;
+            bottom: 1rem;
+            right: calc(100vw / 2 - 553.09px / 2);
+            gap: 2rem;
+            padding: 1rem;
+            width: auto;
+            border-radius: 20px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+                rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        }
+
+        @include desktop {
             display: flex;
             flex-direction: column;
             gap: 1rem;

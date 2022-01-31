@@ -51,12 +51,13 @@ export default class Ledger extends Component {
             if (je.debit_credit === 'C') balance -= je.amount;
             
             return (
-                <div className='Journals__Item'>
-                    <p className='Journals__Text'>{this.dateFormatter(je.date)}</p>
-                    <p className='Journals__Text'>{je.account}</p>
-                    <p className='Journals__Text'>{je.debit_credit === 'D' ? je.amount: '-'}</p>
-                    <p className='Journals__Text'>{je.debit_credit === 'C' ? je.amount: '-'}</p>
-                    <p className='Journals__Text'>{balance}</p>
+                <div key={je.id}className='Entries__Item'>
+                    <p className='Entries__Text'>{this.dateFormatter(je.date)}</p>
+                    <p className='Entries__Text'>{je.account}</p>
+                    <p className='Entries__Text'>{je.description}</p>
+                    <p className='Entries__Text Entries__Text--Number'>{je.debit_credit === 'D' ? je.amount.toFixed(2): '-'}</p>
+                    <p className='Entries__Text Entries__Text--Number'>{je.debit_credit === 'C' ? je.amount.toFixed(2): '-'}</p>
+                    <p className='Entries__Text Entries__Text--Number'>{balance === 0 ? '-' : balance.toFixed(2)}</p>
                 </div>
             )
         })
@@ -68,20 +69,31 @@ export default class Ledger extends Component {
         if (this.state.isLoading) return <></>;
         return (
             <div className='Ledger'>
-                <div className='Ledger__Header'>
-                    <h1 className='Ledger__Title'>Journal Entries</h1>
-                    <img className='Ledger__Add-Icon' src={addIcon} alt="add" />
-                </div>
-
-                <div className='Journals'>
-                    <div className='Journals__Header'>
-                        <p className='Journals__Label'>Date</p>
-                        <p className='Journals__Label'>Account</p>
-                        <p className='Journals__Label'>Debit</p>
-                        <p className='Journals__Label'>Credit</p>
-                        <p className='Journals__Label'>Balance</p>
+                <div className='Transactions'>
+                    <div className='Transactions__Header'>
+                        <h1 className='Transactions__Title'>Transactions</h1>
+                        <img className='Transactions__Add-Icon' src={addIcon} alt="add" />
                     </div>
-                    {this.renderJournals()}
+                </div>
+                <div className='Journal'>
+                    <div className='Journal__Header'>
+                        <h1 className='Journal__Title'>Journal Entries</h1>
+                    </div>
+
+                    <div className='Entries'>
+                        <div className='Entries__Header'>
+                            <p className='Entries__Label'>Date</p>
+                            <p className='Entries__Label'>Account</p>
+                            <p className='Entries__Label'>Description</p>
+                            <p className='Entries__Label Entries__Label--Number'>Debit</p>
+                            <p className='Entries__Label Entries__Label--Number'>Credit</p>
+                            <p className='Entries__Label Entries__Label--Number'>Balance</p>
+                        </div>
+                        {this.renderJournals()}
+                        {this.renderJournals()}
+                        {this.renderJournals()}
+                        {this.renderJournals()}
+                    </div>
                 </div>
             </div>
         );
