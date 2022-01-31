@@ -63,4 +63,11 @@ exports.getJournalEntries = (req, res) => {
     getAllItemsHandler(res, promise, 'journal entries')
 }
 
+exports.getAllJournalEntries = (req, res) => {
+    const trx_id = req.params.id;
+    const user_id = req.user.id;
+    const promise = journalsDAO("readAll", user_id, trx_id, null, null);
+    getAllItemsHandler(res, promise, 'journal entries')
+}
+
 // edit transaction w/ journal entry

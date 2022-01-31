@@ -1,0 +1,66 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Ledger {
+    @include padding;
+    position: relative;
+
+    &__Header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    &__Title {
+        @include subtitles;
+        margin: 0;
+    }
+
+    &__Add-Icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
+    }
+}
+
+.Journals {
+    display: flex;
+    flex-direction: column;
+
+    &__Header {
+        display: flex;
+    }
+
+    &__Label {
+        @include labels;
+        width: 20%;
+        margin: 0;
+    }
+
+    &__Text {
+        @include body;
+        width: 20%;
+        margin: 0;
+    }
+
+    &__Item {
+        display: flex;
+    }
+}

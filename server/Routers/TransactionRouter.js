@@ -1,6 +1,6 @@
 const express = require('express');
 const { authorize } = require('../Middleware/Authorize');
-const { getJournalEntries, addTransaction, deleteTransaction, getTransactions } = require('../Controllers/TransactionsController');
+const { getJournalEntries, addTransaction, deleteTransaction, getTransactions, getAllJournalEntries } = require('../Controllers/TransactionsController');
 
 const router = express.Router();
 
@@ -15,5 +15,8 @@ router.route('/:id')
 
 router.route('/:id/ledger')
     .get(getJournalEntries)
+
+router.route('/ledger')
+    .get(getAllJournalEntries);
 
 module.exports = router;
