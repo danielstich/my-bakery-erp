@@ -56,7 +56,9 @@ export default class Ledger extends Component {
                         isLoading: false,
                         transactions: response.data.transactions,
                         currentTransaction: {...response.data.transactions[0]},
-                        isJournalsLoading: true
+                        isJournalsLoading: true,
+                        isAdd: false,
+                        isEdit: false
                 })
             })
             .catch(error => {
@@ -124,13 +126,14 @@ export default class Ledger extends Component {
         })
     }
 
-    hideAdd = () => {
-        this.setState({
+    hideAdd = (wasSubmitted) => {
+        if(wasSubmitted) this.getTransactions();
+        else this.setState({
             isAdd: false
         })
     }
 
-    hideEdit = () => {
+    hideEdit = (wasSubmitted) => {
         this.setState({
             isJournalsLoading: true,
         })
@@ -150,13 +153,28 @@ export default class Ledger extends Component {
     }
 
     removeNewLine = (id) => {
+        if (this.state.newJournals.length === 1) return;
         const newJournals = this.state.newJournals.filter(je => je.id !== id);
         this.setState({newJournals});
     }
 
     removeLine = (id) => {
         const journals = this.state.journals.filter(je => je.id !== id);
-        this.setState({journals});
+        let newJournals;
+        if (journals.length === 0 && this.state.newJournals.length === 0) {
+            newJournals = [...this.state.newJournals];
+            newJournals.push({
+                    date: '',
+                    account: '',
+                    debit_credit: '',
+                    description: '',
+                    amount: '',
+                    id: uuid()
+            })
+
+            this.setState({journals, newJournals})
+        }
+        else this.setState({journals});
     }
 
     confirmNewLine = (id) => {
@@ -253,27 +271,15 @@ export default class Ledger extends Component {
             )
         })
 
-        this.state.newJournals.forEach((je, i) => {
+        this.state.newJournals.forEach(je => {
             const newLine = <BlankTransactionLine 
+                                key={je.id}
                                 je={je}
                                 onJournalChangeHandler={this.onJournalChangeHandler}
                                 removeNewLine={this.removeNewLine}
                                 confirmNewLine={this.confirmNewLine} />                
             journalsList.push(newLine)
         })
-        
-
-        if (this.state.journals.length === 0) journalsList.push(<BlankTransactionLine 
-            je={{
-                date: '',
-                account: '',
-                description: '',
-                amount: '',
-                id: uuid()
-            }}
-            onJournalChangeHandler={this.onJournalChangeHandler}
-            removeNewLine={this.removeLine}
-            confirmNewLine={this.confirmNewLine} />)
 
         return journalsList;
     }
@@ -339,7 +345,7 @@ export default class Ledger extends Component {
                     </div>
                         {this.state.isEdit && <img onClick={this.addLine} className='Journal__Add-Icon' src={addIcon} alt='add'/>}
                 </div>}
-                {this.state.isAdd && <AddTransactionForm hideAdd={this.hideAdd} />}
+                {this.state.isAdd && <AddTransactionForm alertHandler={this.props.alertHandler} API_URL={this.state.API_URL} options={this.state.options} hideAdd={this.hideAdd} />}
             </div>
         );
     }

@@ -9,11 +9,18 @@ import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 
 export default function AddTransactionForm(props) {
-    const { hideAdd, API_URL, options } = props;
+    const { hideAdd, API_URL, options, alertHandler } = props;
 
-    const [transaction, setTransaction ] = useState({})
+    const [transaction, setTransaction ] = useState({date: '', description: ''})
     const [journals, setJournals ] = useState([])
-    const [newJournals, setNewJournals ] = useState([])
+    const [newJournals, setNewJournals ] = useState([{
+        date: '',
+        account: '',
+        debit_credit: '',
+        description: '',
+        amount: '',
+        id: uuid()
+}])
 
     const dateFormatter = (date) => {
         const newDate = new Date(date.slice(0,10).replace(/-/g,'/'));
@@ -38,13 +45,28 @@ export default function AddTransactionForm(props) {
     }
 
     const removeNewLine = (id) => {
+        if (newJournals.length === 1 && journals.length === 0) return;
         const newJournalsArr = newJournals.filter(je => je.id !== id);
         setNewJournals(newJournalsArr);
     }
 
     const removeLine = (id) => {
         const journalsArr = journals.filter(je => je.id !== id);
-        this.setState(journalsArr);
+        let newJournalsArr;
+        if (journalsArr.length === 0 && newJournals.length === 0) {
+            newJournalsArr = [...newJournals];
+            newJournalsArr.push({
+                    date: '',
+                    account: '',
+                    debit_credit: '',
+                    description: '',
+                    amount: '',
+                    id: uuid()
+            })
+            setJournals(journalsArr)
+            setNewJournals(newJournalsArr)
+        }
+        setJournals(journalsArr)
     }
 
     const confirmNewLine = (id) => {
@@ -52,8 +74,15 @@ export default function AddTransactionForm(props) {
         const journalsArr = [...journals];
         journalsArr.push(journalObj);
         const newJournalsArr = newJournals.filter(je => je.id !== id);
-        setNewJournals(newJournalsArr);
         setJournals(journalsArr);
+        setNewJournals(newJournalsArr);
+    }
+
+    const onTransactionChangeHandler = (event) => {
+        const { name, value } = event.target;
+        const newTransaction = {...transaction};
+        newTransaction[name] = value;
+        setTransaction(newTransaction);
     }
 
     const onJournalChangeHandler = (event, id) => {
@@ -83,28 +112,23 @@ export default function AddTransactionForm(props) {
             return je;
         })
 
-        const transaction = {
-            date: '',
-            description: ''
-        };
-        transaction.date = transaction.date.slice(0, 10)
-
         const trx = {transaction, journals: journalsArr}
 
         axios.post(`${API_URL}/transactions`, trx, options)
             .then(response => {
-                this.getTransactions();
-                this.props.alertHandler({type: 'success', msg: 'Transaction was Added'})
+                alertHandler({type: 'success', msg: response.data.success})
+                hideAdd(true);
             })
             .catch(error => {
-                console.log(error.response)
-                this.props.alertHandler({type: 'error', msg: error.response.data.error})
+                console.log(error)
+                alertHandler({type: 'error', msg: error.response.data.error})
             })
     }
 
     const renderJournals = () => {
         let balance = 0;
-        const journalsList = journals.map(je => {
+        let journalsList = [];
+        journalsList = journals.map(je => {
             
             if (je.debit_credit === 'D') balance += je.amount;
             if (je.debit_credit === 'C') balance -= je.amount;
@@ -117,34 +141,22 @@ export default function AddTransactionForm(props) {
                     <p className='Journal__Text Journal__Text--Number'>{je.debit_credit === 'D' ? je.amount.toFixed(2): '-'}</p>
                     <p className='Journal__Text Journal__Text--Number'>{je.debit_credit === 'C' ? je.amount.toFixed(2): '-'}</p>
                     <p className='Journal__Text Journal__Text--Balance'>{balance === 0 ? '-' : balance.toFixed(2)}</p>
-                    {this.state.isEdit && <img onClick={() => removeLine(je.id)} className='Journal__Remove-Icon' src={removeIcon} alt="" />}
+                    <img onClick={() => removeLine(je.id)} className='Journal__Remove-Icon' src={removeIcon} alt="" />
                 </div>
             )
         })
 
-        newJournals.forEach((je, i) => {
+        newJournals.forEach(je => {
             const newLine = <BlankTransactionLine 
+                                key={je.id}
                                 je={je}
                                 onJournalChangeHandler={onJournalChangeHandler}
                                 removeNewLine={removeNewLine}
                                 confirmNewLine={confirmNewLine} />                
             journalsList.push(newLine)
         })
-        
 
-        if (journals.length === 0) journalsList.push(<BlankTransactionLine 
-            je={{
-                date: '',
-                account: '',
-                description: '',
-                amount: '',
-                id: uuid()
-            }}
-            onJournalChangeHandler={onJournalChangeHandler}
-            removeNewLine={removeNewLine}
-            confirmNewLine={confirmNewLine} />)
-
-        return journalsList;
+        return journalsList
     }
 
     return (
@@ -152,15 +164,26 @@ export default function AddTransactionForm(props) {
                     <div className='Journal__Header'>
                         <h1 className='Journal__Title Journal__Title--Add'>Transaction Details:</h1>
                         <img onClick={submitTransaction} className='Journal__Icon Journal__Icon--Submit' src={doneIcon} alt="" />                        
-                        <img onClick={hideAdd} className='Journal__Icon' src={closeIcon} alt="" />
+                        <img onClick={() => hideAdd(false)} className='Journal__Icon' src={closeIcon} alt="" />
                     </div>
                     <div className='New-Transaction__Input-Container'>
                         <p className='New-Transaction__Label'>Date:</p>
-                        <input className='New-Transaction__Input' type="text" />
+                        <input 
+                            onChange={onTransactionChangeHandler} 
+                            className='New-Transaction__Input New-Transaction__Input--Date' 
+                            name="date" 
+                            value={transaction.date}
+                            type="date" />
                         {/* <p className='Journal__Label Journal__Label--Header'>Type:</p> */}
                         <p className='New-Transaction__Label'>Description:</p>
-                        <textarea type="text" />
+                        <textarea 
+                            onChange={onTransactionChangeHandler} 
+                            className='New-Transaction__Input New-Transaction__Input--Textarea' 
+                            name="description" 
+                            value={transaction.description}
+                            type="text" />
                     </div>
+                        <h1 className='Journal__Title Journal__Title--Add'>Journal Entries:</h1>
                     <div className='Journal__List'>
                         <div className='Journal__List-Header'>
                             <p className='Journal__Label'>Date</p>
@@ -170,6 +193,7 @@ export default function AddTransactionForm(props) {
                             <p className='Journal__Label Journal__Label--Number'>Credit</p>
                             <p className='Journal__Label Journal__Label--Balance'>Balance</p>
                         </div>
+                        {renderJournals()}
                     </div>
                         <img onClick={addLine} className='Journal__Add-Icon' src={addIcon} alt='add'/>
                 </div>

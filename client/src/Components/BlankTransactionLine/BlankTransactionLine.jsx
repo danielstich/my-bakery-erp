@@ -3,9 +3,9 @@ import removeIcon from '../../Assets/Icons/remove.svg';
 import doneIcon from '../../Assets/Icons/done.svg';
 
 export default function BlankTransactionLine(props) {
-    const {je, onJournalChangeHandler, removeNewLine, confirmNewLine} = props;
+    const {je, onJournalChangeHandler, removeNewLine, confirmNewLine, aKey} = props;
     return (
-        <div key={je.id}className='Journal__Item Journal__Item--Input'>
+        <div className='Journal__Item Journal__Item--Input'>
             <input 
                 type='date'
                 name='date'
