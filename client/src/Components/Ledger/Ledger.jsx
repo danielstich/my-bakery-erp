@@ -35,8 +35,7 @@ export default class Ledger extends Component {
     }
 
     dateFormatter = (date) => {
-        console.log(date.slice(0,10).replace('-', /d/i))
-        const newDate = new Date(date);
+        const newDate = new Date(date.slice(0,10).replace(/-/g,'/'));
         const day = newDate.getDate().toString().padStart(2, '0');
         const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
         const year = newDate.getFullYear().toString().slice(2);
@@ -77,7 +76,8 @@ export default class Ledger extends Component {
                     journals: [...response.data['journal entries']],
                     currentTransaction: trx,
                     newJournals: [],
-                    isEdit: false
+                    isEdit: false,
+                    isAdd: false
                 })
             })
     } 
@@ -130,6 +130,12 @@ export default class Ledger extends Component {
         })
     }
 
+    hideEdit = () => {
+        this.setState({
+            isJournalsLoading: true,
+        })
+    }
+
     addLine = () => {
         const newJournals = [...this.state.newJournals];
         newJournals.push({
@@ -171,7 +177,6 @@ export default class Ledger extends Component {
             je.date = je.date.slice(0,10)
             delete je.id;
             delete je.user_id;
-            console.log(je)
             return je;
         })
 
@@ -311,6 +316,7 @@ export default class Ledger extends Component {
                     <div className='Journal__Header'>
                         <h1 className='Journal__Title'>Transaction Details:</h1>
                         {!this.state.isEdit && <img onClick={this.editJournal} className='Journal__Edit-Icon' src={editIcon} alt="" />}
+                        {!this.state.isEdit && <img onClick={this.hideEdit} className='Journal__Close-Edit-Icon' src={closeIcon} alt="" />}
                         {this.state.isEdit && <img onClick={() => this.submitTransaction(this.state.currentTransaction.id)} className='Journal__Icon Journal__Icon--Submit' src={doneIcon} alt="" />}
                         {this.state.isEdit && <img onClick={() => this.deleteTransaction(this.state.currentTransaction.id)} className='Journal__Icon' src={deleteIcon} alt="" />}
                         {this.state.isEdit && <img onClick={this.editJournal} className='Journal__Icon' src={closeIcon} alt="" />}

@@ -149,6 +149,10 @@
         @include subtitles;
         margin: 0;
         margin-bottom: 1.25rem;
+
+        &--Add {
+            margin-bottom: 0;
+        }
     }
 
     &__Icon {
@@ -175,6 +179,14 @@
 
     &__Edit-Icon {
         margin-left: auto;
+        width: 2.5rem;
+        height: 2.5rem;
+        text-align: right;
+        align-self: center;
+        cursor: pointer;
+    }
+
+    &__Close-Edit-Icon {
         width: 2.5rem;
         height: 2.5rem;
         text-align: right;

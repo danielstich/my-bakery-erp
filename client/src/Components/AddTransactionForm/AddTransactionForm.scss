@@ -1,2 +1,16 @@
 @use '../../Styles/mixins' as *;
 @use '../../Styles/variables' as *;
+
+.New-Transaction {
+    &__Label {
+        @include labels;
+        width: 25%;
+        margin: 0;
+    }
+
+    &__Input-Container {
+    }
+
+    &__Input {
+    }
+}
