@@ -42,6 +42,7 @@ exports.journalsDAO = (type, user_id, trx_id, journals, ktrx) => {
     let promise = ktrx ? knex('ledger').transacting(ktrx) : knex('ledger');
     if (type === 'create') return promise.insert(journals);
     else if (type === 'read') return knex('ledger').where({user_id, trx_id});
+    else if (type === 'readAll') return knex('ledger').where({user_id});
     else if (type === 'update') promiseArray = journals.map(je => promise.where({id: je.id, user_id}).update(je));
     else if (type === 'delete') promiseArray = journals.map(je => promise.where({id: je.id, user_id}).del());   
     else return new Error('Wrong DAO Operation');

@@ -1,0 +1,397 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Ledger {
+    @include padding;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    @include desktop {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+.Transactions {
+    @include desktop {
+        width: 40%;
+    }
+    &__Header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    &__Add-Icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
+    }
+
+    &__Edit-Icon {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    &__Title {
+        @include subtitles;
+        margin: 0;
+    }
+
+    &__List {
+        display: flex;
+        flex-direction: column;
+        border: 1px dashed grey;
+        border-radius: 10px;
+    }
+
+    &__List-Header {
+        display: flex;
+        background-color: $background-color-4;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 0.25rem;
+    }
+
+    &__Label {
+        @include labels;
+        width: 25%;
+        margin: 0;
+
+        &--Number {
+            text-align: right;
+            padding-right: 0.5rem;
+        }
+
+        &--Type {
+            width: 20%;
+        }
+
+        &--Description {
+            width: 55%;
+        }
+    }
+
+    &__Text {
+        @include body;
+        width: 25%;
+        margin: 0;
+
+        &--Type {
+            width: 20%;
+        }
+
+        &--Description {
+            width: 55%;
+        }
+    }
+
+    &__Item {
+        display: flex;
+        padding: 0.25rem;
+        cursor: pointer;
+
+        &:nth-child(odd) {
+            background-color: $background-color-4;
+        }
+
+        &:nth-child(even) {
+            background-color: $background-color-5;
+        }
+
+        &:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        &--Active {
+            &:nth-child(odd) {
+                background-color: grey;
+            }
+
+            &:nth-child(even) {
+                background-color: grey;
+            }
+            background-color: grey;
+        }
+
+        &:hover {
+            filter: brightness(95%);
+        }
+    }
+}
+
+.Journal {
+    position: relative;
+    @include desktop {
+        width: 59%;
+    }
+    &__Header {
+        position: relative;
+        padding: 1rem 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &__Title {
+        width: 50%;
+        @include subtitles;
+        margin: 0;
+        margin-bottom: 1.25rem;
+
+        &--Add {
+            margin-bottom: 0;
+        }
+    }
+
+    &__Icon {
+        padding-left: 0.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        text-align: right;
+        align-self: center;
+        cursor: pointer;
+
+        &--Submit {
+            margin-left: auto;
+        }
+    }
+
+    &__Add-Icon {
+        position: absolute;
+        bottom: -0.75rem;
+        right: 0.3rem;
+        border-radius: 50%;
+        background-color: $success-color;
+        cursor: pointer;
+    }
+
+    &__Edit-Icon {
+        margin-left: auto;
+        width: 2.5rem;
+        height: 2.5rem;
+        text-align: right;
+        align-self: center;
+        cursor: pointer;
+    }
+
+    &__Close-Edit-Icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        text-align: right;
+        align-self: center;
+        cursor: pointer;
+    }
+
+    &__Remove-Icon {
+        position: absolute;
+        right: 0.25rem;
+        top: 0.25rem;
+        background-color: $error-color;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    &__Confirm-Icon {
+        position: absolute;
+        right: 2rem;
+        top: 0.25rem;
+        border-radius: 50%;
+        background-color: $success-color;
+        cursor: pointer;
+    }
+
+    &__List {
+        display: flex;
+        flex-direction: column;
+        border: 1px dashed grey;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+
+        @include desktop {
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__List-Header {
+        display: flex;
+        background-color: $background-color-4;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 0.25rem;
+    }
+
+    &__Label {
+        @include labels;
+        width: 25%;
+        margin: 0;
+
+        @include tablet {
+            width: 16.6667%;
+        }
+
+        &--Number {
+            text-align: right;
+            padding-right: 0.5rem;
+        }
+
+        &--Header {
+            width: 50%;
+        }
+
+        &--Description {
+            display: none;
+            @include tablet {
+                display: block;
+            }
+        }
+
+        &--Balance {
+            padding-right: 1.75rem;
+            text-align: right;
+            display: none;
+            @include tablet {
+                display: block;
+            }
+        }
+    }
+
+    &__Text {
+        @include body;
+        width: 25%;
+        margin: 0;
+        align-self: center;
+
+        @include tablet {
+            width: 16.6667%;
+        }
+
+        &--Number {
+            text-align: right;
+            padding-right: 0.5rem;
+        }
+
+        &--Header {
+            width: 100%;
+        }
+
+        &--Description {
+            display: none;
+            @include tablet {
+                display: block;
+            }
+        }
+
+        &--Balance {
+            padding-right: 1.75rem;
+            text-align: right;
+            display: none;
+            @include tablet {
+                display: block;
+            }
+        }
+    }
+
+    &__Input {
+        @include body;
+        font-size: 0.8125rem;
+        margin: 0;
+        width: 25%;
+        border: none;
+        background-color: transparent;
+        border-right: 1px grey dashed;
+        border-top: 1px grey dashed;
+
+        @include desktop {
+            width: 16.6667%;
+        }
+
+        &--Description {
+            display: none;
+            @include tablet {
+                display: block;
+            }
+        }
+
+        &--Credit {
+            border-right: none;
+
+            @include tablet {
+                border-right: 1px grey dashed;
+            }
+        }
+
+        &--Balance {
+            text-align: right;
+            display: none;
+            @include tablet {
+                background-color: lightgray;
+                display: flex;
+            }
+        }
+
+        &:active,
+        &:focus {
+            outline: none;
+        }
+
+        &:first-child {
+            font-size: 0.8125rem;
+            border-bottom-left-radius: 10px;
+            &::-webkit-datetime-edit-fields-wrapper {
+                padding: 0.25rem;
+                @include body;
+                font-size: 0.8125rem;
+            }
+            &::-webkit-datetime-edit-text {
+                padding: 0 0.1rem;
+            }
+            &::-webkit-calendar-picker-indicator {
+                margin: 0;
+            }
+        }
+        &:last-child {
+            border-right: none;
+        }
+    }
+
+    &__Item {
+        position: relative;
+        display: flex;
+        padding: 0.25rem;
+
+        &:nth-child(odd) {
+            background-color: $background-color-4;
+        }
+
+        &:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        &--Input {
+            height: 2rem;
+            padding: 0;
+            background-color: white;
+
+            &:nth-child(odd) {
+                background-color: white;
+            }
+
+            &:last-child > p:last-child {
+                border-bottom-right-radius: 10px;
+            }
+        }
+    }
+}

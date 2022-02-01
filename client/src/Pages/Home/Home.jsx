@@ -10,6 +10,7 @@ import Header from '../../Components/Header/Header';
 import Toolbar from '../../Components/Toolbar/Toolbar';
 import Alert from '../../Components/Alert/Alert';
 import Landing from '../../Components/Landing/Landing';
+import Ledger from '../../Components/Ledger/Ledger';
 
 export default class Home extends Component {
   state = {
@@ -24,7 +25,6 @@ export default class Home extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.props.location.state)
     if (this.props.location.state) this.alert(this.props.location.state)
     const token = sessionStorage.getItem('token');
 
@@ -85,6 +85,7 @@ export default class Home extends Component {
               <Route path={url + '/inventory'} render={(props)=> <Inventory {...props} alertHandler={this.alert} />} />
               <Route path={url + '/recipes'} render={(props)=> <Recipes {...props} alertHandler={this.alert} />} /> 
               <Route path={url + '/batches'} render={(props)=> <Batches {...props} alertHandler={this.alert} />} />
+              <Route path={url + '/ledger'} render={(props)=> <Ledger {...props} alertHandler={this.alert} />} />
             </Switch>
             }
             {!this.state.isLoggedIn && !this.state.isVerifying && <Landing />}
