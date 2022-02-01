@@ -42,7 +42,7 @@
 
     &__Title {
         @include subtitles;
-        color: white;
+        color: $text-color-2;
         @include tablet {
             margin-right: auto;
         }
@@ -104,7 +104,7 @@
         }
 
         @include tablet {
-            color: white;
+            color: $text-color-2;
             border-top: none;
 
             &:active {

@@ -2,14 +2,15 @@ $background-color-1: #a86f35;
 $background-color-2: #ccc;
 $background-color-cta: #064490;
 $background-color-3: #1a5cad;
-$background-color-4: rgb(226, 243, 217);
-$background-color-5: rgb(210, 219, 192);
+$background-color-4: #fffbfe; // main card color
+$background-color-5: #e1e3da; // Main background color
 $active-state: rgb(177, 190, 173);
 $text-color-1: #181717;
-$text-color-2: rgb(248, 246, 231);
+$text-color-2: #fffbfe;
 $error-color: rgb(163, 39, 39);
 $error-color-2: darkred;
-$success-color: #3c7646;
+$success-color: #243e60; // main tool bar color
+$success-color-2: #009e59;
 
 $tablet-size: 48rem;
 $desktop-size: 80rem;

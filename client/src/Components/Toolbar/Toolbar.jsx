@@ -22,7 +22,7 @@ export default function Toolbar() {
 
     return (
         <div className='Toolbar__Container'>
-            <div className={!showFinances ? 'Toolbar Toolbar--hidden' : 'Toolbar'}>
+            <div className={'Toolbar'}>
                 <Link className='Toolbar__Link' to='/home/inventory'>
                     <img className='Toolbar__Icon' src={inventoryIcon} alt="clipboard icon" />
                     Inventory
@@ -35,28 +35,10 @@ export default function Toolbar() {
                     <img className='Toolbar__Icon' src={counterTopIcon} alt="kitchen icon" />
                     Batches
                 </Link>
-                <div className='Toolbar__Link Toolbar__Link--toggle' onClick={toggleFinances}>
-                <img className='Toolbar__Icon' src={rightIcon} alt="clipboard icon" />
-                    Finances
-                </div>
-            </div>
-            <div className={showFinances ? 'Toolbar Toolbar--hidden' : 'Toolbar'}>
-                <Link className='Toolbar__Link' to='/home'>
-                    <img className='Toolbar__Icon' src={storeIcon} alt="clipboard icon" />
-                    Sales
-                </Link>
-                <Link className='Toolbar__Link' to='/home'>
-                    <img className='Toolbar__Icon' src={ordersIcon} alt="reciped book" />
-                    Orders
-                </Link>
                 <Link className='Toolbar__Link' to='/home/ledger'>
-                    <img className='Toolbar__Icon' src={receipeIcon} alt="kitchen icon" />
+                    <img className='Toolbar__Icon' src={financeIcon} alt="kitchen icon" />
                     Ledger
                 </Link>
-                <div className='Toolbar__Link Toolbar__Link--toggle' onClick={toggleFinances}>
-                <img className='Toolbar__Icon' src={leftIcon} alt="clipboard icon" />
-                    Kitchen
-                </div>
             </div>
         </div>
     )

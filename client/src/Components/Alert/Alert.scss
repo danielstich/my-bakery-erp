@@ -14,7 +14,7 @@
 
     &__Body {
         @include body;
-        color: white;
+        color: $text-color-2;
         text-align: center;
         margin: 0;
     }
@@ -32,7 +32,7 @@
         border-radius: 10px;
 
         &--success {
-            background-color: $success-color;
+            background-color: $success-color-2;
         }
 
         &--error {
