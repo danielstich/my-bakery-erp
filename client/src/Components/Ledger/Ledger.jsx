@@ -1,16 +1,21 @@
 import { Component } from 'react';
+import AddTransactionForm from '../AddTransactionForm/AddTransactionForm';
 import './Ledger.scss';
 import addIcon from '../../Assets/Icons/add.svg';
 import editIcon from '../../Assets/Icons/edit.svg';
 import removeIcon from '../../Assets/Icons/remove.svg';
 import doneIcon from '../../Assets/Icons/done.svg';
+import closeIcon from '../../Assets/Icons/close_black_24dp.svg'
+import deleteIcon from '../../Assets/Icons/delete.svg'
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 
 export default class Ledger extends Component {
     state = {
         isLoading: true,
+        isJournalsLoading: true,
         isEdit: false,
+        isAdd: false,
         transactions: [],
         journals: [],
         newJournals: [],
@@ -24,6 +29,10 @@ export default class Ledger extends Component {
         }
     }
 
+    componentDidMount () {
+        this.getTransactions();
+    }
+
     dateFormatter = (date) => {
         const newDate = new Date(date);
         const day = newDate.getDate().toString().padStart(2, '0');
@@ -32,30 +41,26 @@ export default class Ledger extends Component {
         return `${month}/${day}/${year}`
     }
 
+    getAccounts() {
 
-    componentDidMount () {
+    }
+
+    getTransactions() {
         const { API_URL, options } = this.state;
         axios.get(`${API_URL}/transactions`, options)
         
             .then(response => {
                 if(response.data.transactions.length === 0) throw new Error ('No transactions found');
-                const id = response.data.transactions[0].id;
                     this.setState({
+                        isLoading: false,
                         transactions: response.data.transactions,
-                        currentTransaction: {...response.data.transactions[0]}
-                    
-                })
-                return axios.get(`${API_URL}/transactions/${id}/ledger`, options)
-            })
-            .then(response => {
-                this.setState({
-                    journals: [...response.data['journal entries']],
-                    isLoading: false,
+                        currentTransaction: {...response.data.transactions[0]},
+                        isJournalsLoading: true
                 })
             })
             .catch(error => {
                 console.log(error)
-                this.props.alertHandler({type: 'error', error: error})
+                this.props.alertHandler({type: 'error', msg: error.message})
                 console.log(error)
             })
     }
@@ -66,9 +71,11 @@ export default class Ledger extends Component {
         axios.get(`${API_URL}/transactions/${trx.id}/ledger`, options)
             .then(response => {
                 this.setState({
+                    isJournalsLoading: false,
                     journals: [...response.data['journal entries']],
                     currentTransaction: trx,
-                    newJournals: []
+                    newJournals: [],
+                    isEdit: false
                 })
             })
     } 
@@ -77,35 +84,74 @@ export default class Ledger extends Component {
         const i = this.state.newJournals.findIndex(je => je.id === id);
         const newJournals = [...this.state.newJournals]
         const { name, value } = event.target;
-        console.log(i, id, newJournals[i])
-        newJournals[i][name] = value;
+
+        if (name === 'debit') {
+            newJournals[i]['amount'] = parseFloat(value);
+            newJournals[i]['debit_credit'] = 'D';
+        } 
+        else if (name === 'credit') {
+            newJournals[i]['amount'] = parseFloat(value);
+            newJournals[i]['debit_credit'] = 'C';
+        }
+        else {
+            newJournals[i][name] = value;
+        }
         this.setState({newJournals})
     }
 
     editJournal = () => {
+        const currentTransaction = {...this.state.currentTransaction}
+        if (this.state.isEdit) {
+            this.setState({
+                isEdit: !this.state.isEdit,
+                newJournals: [],
+            }, this.selectTransaction(currentTransaction))
+        }
+        if (!this.state.isEdit) {
+            this.setState({
+                isEdit: !this.state.isEdit,
+                newJournals: [],
+            })
+        }
+    }
+
+    showAdd = () => {
         this.setState({
-            isEdit: !this.state.isEdit,
-            newJournals: []
+            isAdd: true,
+            isJournalsLoading: true,
+        })
+    }
+
+    hideAdd = () => {
+        this.setState({
+            isAdd: false
         })
     }
 
     addLine = () => {
         const newJournals = [...this.state.newJournals];
         newJournals.push({
-            date: null,
+            date: '',
             account: '',
+            debit_credit: '',
             description: '',
-            amount: null,
+            amount: '',
             id: uuid()
         })
         this.setState({newJournals})
     }
+
     removeNewLine = (id) => {
         const newJournals = this.state.newJournals.filter(je => je.id !== id);
         this.setState({newJournals});
     }
+
+    removeLine = (id) => {
+        const journals = this.state.journals.filter(je => je.id !== id);
+        this.setState({journals});
+    }
+
     confirmNewLine = (id) => {
-        // add je to array
         const journal = {...this.state.newJournals.find(je => je.id === id)};
         const journals = [...this.state.journals];
         journals.push(journal);
@@ -116,22 +162,112 @@ export default class Ledger extends Component {
         })
     }
 
-    submitTransaction = () => {
-        // add
-        // delete
+    submitTransaction = (id) => {
+        const { API_URL, options } = this.state;
+
+        const journals = this.state.journals.map(je => {
+            je.date = je.date.slice(0,10)
+            delete je.id;
+            delete je.user_id;
+            console.log(je)
+            return je;
+        })
+
+        const transaction = {...this.state.currentTransaction};
+        delete transaction.create_at;
+        delete transaction.user_id;
+        delete transaction.id;
+        transaction.date = transaction.date.slice(0, 10)
+
+        console.log(transaction)
+
+        const trx = {transaction, journals}
+
+        axios.post(`${API_URL}/transactions`, trx, options)
+            .then(() => {
+                return axios.delete(`${API_URL}/transactions/${id}`, options);
+            })
+            .then(response => {
+                this.getTransactions();
+                this.props.alertHandler({type: 'success', msg: 'Transaction was Updated'})
+            })
+            .catch(error => {
+                console.log(error.response)
+                this.props.alertHandler({type: 'error', msg: error.response.data.error})
+            })
     }
 
-    addTransaction = (trx) => {
-        // axios post
+    addTransaction = () => {
+        const { API_URL, options } = this.state;
+
+        const trx = {transaction: this.state.currentTransaction, journals: this.state.journals}
+
+        axios.post(`${API_URL}/transactions`, trx, options)
+            .then(response => {
+                this.getTransactions();
+                this.props.alertHandler({type: 'success', msg: response.data.success})
+            })
+            .catch(error => {
+                this.props.alertHandler('error', error.response.data.error)
+            })
     }
 
     deleteTransaction = (id) => {
-        // axios delete
+        const { API_URL, options } = this.state;
+
+        axios.delete(`${API_URL}/transactions/${id}`, options)
+            .then(response => {
+                this.getTransactions();
+                console.log(response.data)
+                this.props.alertHandler({type: 'success', msg: response.data.success})
+            })
+            .catch(error => {
+                this.props.alertHandler('error', error.response.data.error)
+            })
     }
 
-    renderNewLine = () => {
-
-    }
+    renderNewLine = (je) => (
+        <div key={je.id}className='Journal__Item Journal__Item--Input'>
+            <input 
+                type='date'
+                name='date'
+                value={je.date}
+                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
+                className='Journal__Input'/>
+            <input 
+                type='text'
+                name='account'
+                value={je.account}
+                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
+                placeholder='Account'
+                className='Journal__Input'/>
+            <input 
+                type='text'
+                name='description'
+                placeholder='Description'
+                value={je.description}
+                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
+                className='Journal__Input Journal__Input--Description'/>
+            <input 
+                type='number'
+                name='debit'
+                placeholder='0'
+                value={je.debit_credit === 'D' ? je.amount : 0}
+                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
+                min='0'
+                className='Journal__Input'/>
+            <input 
+                type='number'
+                name='credit'
+                placeholder='0'
+                value={je.debit_credit === 'C' ? je.amount : 0}
+                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
+                min='0'
+                className='Journal__Input Journal__Input--Credit'/>
+            {this.state.isEdit && <img onClick={() => this.removeNewLine(je.id)} className='Journal__Remove-Icon Journal__Remove-Icon--new' src={removeIcon} alt="" />}
+            {this.state.isEdit && <img onClick={() => this.confirmNewLine(je.id)} className='Journal__Confirm-Icon Journal__Remove-Icon--new' src={doneIcon} alt="" />}
+            <p className='Journal__Input Journal__Input--Balance'></p>
+        </div>)
 
     renderJournals = () => {
         let balance = 0;
@@ -148,58 +284,24 @@ export default class Ledger extends Component {
                     <p className='Journal__Text Journal__Text--Number'>{je.debit_credit === 'D' ? je.amount.toFixed(2): '-'}</p>
                     <p className='Journal__Text Journal__Text--Number'>{je.debit_credit === 'C' ? je.amount.toFixed(2): '-'}</p>
                     <p className='Journal__Text Journal__Text--Balance'>{balance === 0 ? '-' : balance.toFixed(2)}</p>
-                    {this.state.isEdit && <img className='Journal__Remove-Icon' src={removeIcon} alt="" />}
+                    {this.state.isEdit && <img onClick={() => this.removeLine(je.id)} className='Journal__Remove-Icon' src={removeIcon} alt="" />}
                 </div>
             )
         })
 
-        if (this.state.newJournals) {
-            this.state.newJournals.forEach((je, i) => {
-                journalsList.push((
-                    <div key={i}className='Journal__Item Journal__Item--Input'>
-                        <input 
-                            type='date'
-                            name='date'
-                            value={je.date}
-                            onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                            className='Journal__Input'/>
-                        <input 
-                            type='text'
-                            name='account'
-                            value={je.account}
-                            onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                            placeholder='Account'
-                            className='Journal__Input'/>
-                        <input 
-                            type='text'
-                            name='description'
-                            placeholder='Description'
-                            value={je.description}
-                            onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                            className='Journal__Input Journal__Input--Description'/>
-                        <input 
-                            type='number'
-                            name='debit'
-                            placeholder='0'
-                            value={je.debit_credit === 'D' ? je.amount : null}
-                            onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                            min='0'
-                            className='Journal__Input'/>
-                        <input 
-                            type='number'
-                            name='credit'
-                            placeholder='0'
-                            value={je.debit_credit === 'C' ? je.amount : null}
-                            onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                            min='0'
-                            className='Journal__Input Journal__Input--Credit'/>
-                        {this.state.isEdit && <img onClick={() => this.removeNewLine(je.id)} className='Journal__Remove-Icon Journal__Remove-Icon--new' src={removeIcon} alt="" />}
-                        {this.state.isEdit && <img onClick={() => this.confirmNewLine(je.id)} className='Journal__Confirm-Icon Journal__Remove-Icon--new' src={doneIcon} alt="" />}
-                        <p className='Journal__Input Journal__Input--Balance'></p>
-                </div>
-                ))
-            })
-        }
+        this.state.newJournals.forEach((je, i) => {
+            const newLine = this.renderNewLine(je, i)                
+            journalsList.push(newLine)
+        })
+        
+
+        if (this.state.journals.length === 0) journalsList.push(this.renderNewLine({
+            date: '',
+            account: '',
+            description: '',
+            amount: '',
+            id: uuid()
+        }))
 
         return journalsList;
     }
@@ -208,8 +310,9 @@ export default class Ledger extends Component {
         return this.state.transactions.map(trx => {
 
             let text = trx.description.length > 32 ? trx.description.slice(0,28)+"..." : trx.description;
+            const className = (trx.id === this.state.currentTransaction.id) && !this.state.isJournalsLoading ? 'Transactions__Item Transactions__Item--Active' : 'Transactions__Item';
             return (
-                <div key={trx.id} onClick={() => this.selectTransaction(trx)} className='Transactions__Item'>
+                <div key={trx.id} onClick={() => this.selectTransaction(trx)} className={className}>
                     <p className="Transactions__Text">{this.dateFormatter(trx.date)}</p>
                     <p className="Transactions__Text Transactions__Text--Type">{trx.type}</p>
                     <p className="Transactions__Text Transactions__Text--Description">{text}</p>
@@ -225,7 +328,7 @@ export default class Ledger extends Component {
                 <div className='Transactions'>
                     <div className='Transactions__Header'>
                         <h1 className='Transactions__Title'>Transactions</h1>
-                        <img className='Transactions__Add-Icon' src={addIcon} alt="add" />
+                        <img onClick={this.showAdd} className='Transactions__Add-Icon' src={addIcon} alt="add" />
                     </div>
                     <div className='Transactions__List'>
                         <div className='Transactions__List-Header'>
@@ -236,10 +339,14 @@ export default class Ledger extends Component {
                     {this.renderTransactions()}
                     </div>
                 </div>
+                {!this.state.isJournalsLoading && 
                 <div className='Journal'>
                     <div className='Journal__Header'>
                         <h1 className='Journal__Title'>Transaction Details:</h1>
-                        <img onClick={this.editJournal} className='Journal__Edit-Icon' src={editIcon} alt="" />
+                        {!this.state.isEdit && <img onClick={this.editJournal} className='Journal__Edit-Icon' src={editIcon} alt="" />}
+                        {this.state.isEdit && <img onClick={() => this.submitTransaction(this.state.currentTransaction.id)} className='Journal__Icon Journal__Icon--Submit' src={doneIcon} alt="" />}
+                        {this.state.isEdit && <img onClick={() => this.deleteTransaction(this.state.currentTransaction.id)} className='Journal__Icon' src={deleteIcon} alt="" />}
+                        {this.state.isEdit && <img onClick={this.editJournal} className='Journal__Icon' src={closeIcon} alt="" />}
                         <p className='Journal__Label Journal__Label--Header'>Date: {this.dateFormatter(this.state.currentTransaction.date)}</p>
                         <p className='Journal__Label Journal__Label--Header'>Type: {this.state.currentTransaction.type}</p>
                         <p className='Journal__Label Journal__Label--Header'>Description:</p>
@@ -258,7 +365,8 @@ export default class Ledger extends Component {
                         {this.renderJournals()}
                     </div>
                         {this.state.isEdit && <img onClick={this.addLine} className='Journal__Add-Icon' src={addIcon} alt='add'/>}
-                </div>
+                </div>}
+                {this.state.isAdd && <AddTransactionForm hideAdd={this.hideAdd} />}
             </div>
         );
     }

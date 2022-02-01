@@ -8,7 +8,7 @@
     flex-direction: column;
     @include desktop {
         flex-direction: row;
-        gap: 1rem;
+        justify-content: space-between;
     }
 }
 .Transactions {
@@ -115,6 +115,16 @@
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
         }
+        &--Active {
+            &:nth-child(odd) {
+                background-color: grey;
+            }
+
+            &:nth-child(even) {
+                background-color: grey;
+            }
+            background-color: grey;
+        }
 
         &:hover {
             filter: brightness(95%);
@@ -125,7 +135,7 @@
 .Journal {
     position: relative;
     @include desktop {
-        width: 60%;
+        width: 59%;
     }
     &__Header {
         position: relative;
@@ -141,14 +151,26 @@
         margin-bottom: 1.25rem;
     }
 
+    &__Icon {
+        padding-left: 0.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        text-align: right;
+        align-self: center;
+        cursor: pointer;
+
+        &--Submit {
+            margin-left: auto;
+        }
+    }
+
     &__Add-Icon {
-        width: 2rem;
-        height: 2rem;
         position: absolute;
-        bottom: -3rem;
-        right: 0;
+        bottom: -0.75rem;
+        right: 0.3rem;
         border-radius: 50%;
         background-color: $success-color;
+        cursor: pointer;
     }
 
     &__Edit-Icon {
