@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import AddTransactionForm from '../AddTransactionForm/AddTransactionForm';
+import BlankTransactionLine from '../BlankTransactionLine/BlankTransactionLine';
 import './Ledger.scss';
 import addIcon from '../../Assets/Icons/add.svg';
 import editIcon from '../../Assets/Icons/edit.svg';
@@ -34,6 +35,7 @@ export default class Ledger extends Component {
     }
 
     dateFormatter = (date) => {
+        console.log(date.slice(0,10).replace('-', /d/i))
         const newDate = new Date(date);
         const day = newDate.getDate().toString().padStart(2, '0');
         const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
@@ -226,49 +228,6 @@ export default class Ledger extends Component {
             })
     }
 
-    renderNewLine = (je) => (
-        <div key={je.id}className='Journal__Item Journal__Item--Input'>
-            <input 
-                type='date'
-                name='date'
-                value={je.date}
-                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                className='Journal__Input'/>
-            <input 
-                type='text'
-                name='account'
-                value={je.account}
-                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                placeholder='Account'
-                className='Journal__Input'/>
-            <input 
-                type='text'
-                name='description'
-                placeholder='Description'
-                value={je.description}
-                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                className='Journal__Input Journal__Input--Description'/>
-            <input 
-                type='number'
-                name='debit'
-                placeholder='0'
-                value={je.debit_credit === 'D' ? je.amount : 0}
-                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                min='0'
-                className='Journal__Input'/>
-            <input 
-                type='number'
-                name='credit'
-                placeholder='0'
-                value={je.debit_credit === 'C' ? je.amount : 0}
-                onChange={(event) => this.onJournalChangeHandler(event, je.id)}
-                min='0'
-                className='Journal__Input Journal__Input--Credit'/>
-            {this.state.isEdit && <img onClick={() => this.removeNewLine(je.id)} className='Journal__Remove-Icon Journal__Remove-Icon--new' src={removeIcon} alt="" />}
-            {this.state.isEdit && <img onClick={() => this.confirmNewLine(je.id)} className='Journal__Confirm-Icon Journal__Remove-Icon--new' src={doneIcon} alt="" />}
-            <p className='Journal__Input Journal__Input--Balance'></p>
-        </div>)
-
     renderJournals = () => {
         let balance = 0;
         const journalsList = this.state.journals.map(je => {
@@ -290,18 +249,26 @@ export default class Ledger extends Component {
         })
 
         this.state.newJournals.forEach((je, i) => {
-            const newLine = this.renderNewLine(je, i)                
+            const newLine = <BlankTransactionLine 
+                                je={je}
+                                onJournalChangeHandler={this.onJournalChangeHandler}
+                                removeNewLine={this.removeNewLine}
+                                confirmNewLine={this.confirmNewLine} />                
             journalsList.push(newLine)
         })
         
 
-        if (this.state.journals.length === 0) journalsList.push(this.renderNewLine({
-            date: '',
-            account: '',
-            description: '',
-            amount: '',
-            id: uuid()
-        }))
+        if (this.state.journals.length === 0) journalsList.push(<BlankTransactionLine 
+            je={{
+                date: '',
+                account: '',
+                description: '',
+                amount: '',
+                id: uuid()
+            }}
+            onJournalChangeHandler={this.onJournalChangeHandler}
+            removeNewLine={this.removeLine}
+            confirmNewLine={this.confirmNewLine} />)
 
         return journalsList;
     }
