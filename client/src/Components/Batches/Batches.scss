@@ -114,7 +114,7 @@
     }
 
     &__Container {
-        width: 35%;
+        width: 45%;
     }
 
     &__Date {
@@ -124,14 +124,16 @@
 
     &__Title {
         @include body;
-        font-weight: 500;
+        font-weight: 400;
+        font-style: italic;
         margin: 0;
     }
 
     &__Body {
         @include body;
         margin: 0;
-        font-weight: 500;
+        font-weight: 300;
+        font-style: italic;
         align-self: flex-end;
     }
 

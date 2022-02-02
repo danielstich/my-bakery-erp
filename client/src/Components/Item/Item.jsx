@@ -8,7 +8,7 @@ export default function Item(props) {
     return (
     <div key={item.id} className='Item'>
         <h3 className='Item__Title'>{item.name}</h3>
-        <p className='Item__Body'>{item.qty ? item.qty : item.amount} {item.unit}</p>
+        <p className='Item__Body'>{item.qty ? item.qty.toLocaleString() : item.amount} {item.unit}</p>
         {editModal ? 
         <img onClick={() => editModal(item)} className='Item__Icon Item__Icon--last' src={editIcon} alt="" /> :
         <></>}
