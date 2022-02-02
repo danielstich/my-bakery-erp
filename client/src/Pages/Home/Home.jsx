@@ -35,10 +35,11 @@ export default class Home extends Component {
         }
       })
       .then(response => {
+        console.log(response.data)
         this.setState({
           isLoggedIn: true,
           isVerifying: false,
-          user: response.data.user
+          user: response.data
         })
       })
       .catch(error => {
@@ -76,7 +77,7 @@ export default class Home extends Component {
     const url = this.props.match.url;
     return (
       <div className='Home'>
-        <Header logout={this.logout} isLoggedIn={this.state.isLoggedIn}/>
+        <Header user={this.state.user} logout={this.logout} isLoggedIn={this.state.isLoggedIn}/>
         <div className='Home__Container'>
           <div className='Home__Switch'>
             {this.state.isLoggedIn && 

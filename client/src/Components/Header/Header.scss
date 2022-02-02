@@ -47,11 +47,19 @@
             margin-right: auto;
         }
 
-        @include tablet {
-            &::after {
-                content: ' ERP';
-            }
-        }
+        // @include tablet {
+        //     &::after {
+        //         content: ' ERP';
+        //     }
+        // }
+    }
+
+    &__Subtitle {
+        @include subtitles;
+        color: $text-color-2;
+        margin: 0;
+        align-self: center;
+        margin-right: 2rem;
     }
 
     &__Nav {

@@ -51,7 +51,7 @@ export default class Ledger extends Component {
         axios.get(`${API_URL}/transactions`, options)
         
             .then(response => {
-                if(response.data.transactions.length === 0) throw new Error ('No transactions found');
+                // if(response.data.transactions.length === 0) throw new Error ('No transactions found');
                     this.setState({
                         isLoading: false,
                         transactions: response.data.transactions,

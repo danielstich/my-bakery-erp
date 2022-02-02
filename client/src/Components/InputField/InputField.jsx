@@ -13,7 +13,7 @@ export default function InputField({ name, disabled, label, type, extraClasses, 
                 value={value}
                 placeholder={placeholder}
                 onChange={onChangeHandler}
-                min='0'
+                // min='0'
                 autoComplete="off"
                 disabled={disabled}
             />

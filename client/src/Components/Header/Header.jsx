@@ -30,13 +30,14 @@ export default class Header extends Component {
             <div className='Header'>
                 <div className='Header__Container'>
                     <Link className='Header__Link Header__Link--logo' to='/home'><img className='Header__Icon Header__Icon--logo' src={crescent} alt="crescent logo" /></Link>
-                    <Link className='Header__Link Header__Link--logo' to='/home'><h1 className='Header__Title'>My Bakery</h1></Link>
+                    <Link className='Header__Link Header__Link--logo' to='/home'><h1 className='Header__Title'>Whisk</h1></Link>
                     <img 
                         onClick={this.state.navIsVisible ? this.hideMenu : this.showMenu} 
                         className='Header__Icon Header__Icon--menu' 
                         src={this.state.navIsVisible ? openMenu : menu} 
                         alt="crescent logo" />
                     <div className='Header__Nav Header__Nav--tablet'>
+                        <p className='Header__Subtitle'>{this.props.user && `Welcome ${this.props.user.name}`}</p>
                         {!this.props.isLoggedIn && <Link onClick={this.hideMenu} className='Header__Link' to='/Signup' >Sign Up</Link>}
                         {!this.props.isLoggedIn && <Link onClick={this.hideMenu} className='Header__Link' to='/Login' >Login</Link>}
                         {this.props.isLoggedIn && <p onClick={this.props.logout} className='Header__Link Header__Link--Logout'>Log Out</p>}

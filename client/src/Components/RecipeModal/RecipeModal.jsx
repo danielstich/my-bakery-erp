@@ -46,7 +46,7 @@ export default function RecipeModal({ recipe, alertHandler, onSubmitBatch, onCha
                     onChangeHandler={onChangeHandler}
                 />
                 <InputField 
-                    label='Number of Items'
+                    label='Number of Items per Batch'
                     type='number'
                     name='qty'
                     id='qty'
