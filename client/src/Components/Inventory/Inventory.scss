@@ -1,0 +1,110 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Inventory {
+    @include padding;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    &__Header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    &__Title {
+        @include subtitles;
+        margin: 0;
+    }
+
+    &__Items {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    &__Items-Container {
+        position: relative;
+
+        &:last-child {
+            margin-bottom: 8rem;
+            @include tablet {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &__Modal-Container {
+        background-color: rgba($color: white, $alpha: 0.85);
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        right: 0;
+        z-index: 3;
+        @include flex-center;
+
+        @include desktop {
+            position: absolute;
+            height: auto;
+            width: auto;
+            top: 1.5rem;
+            right: -27rem;
+            background-color: transparent;
+            align-items: flex-start;
+            justify-content: flex-end;
+        }
+    }
+
+    &__Modal {
+        padding: 1rem;
+        border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+            rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        background-color: $background-color-5;
+        @include desktop {
+            width: 24.125rem;
+            border: 1px dashed grey;
+            display: flex;
+        }
+    }
+
+    &__Add-Icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
+    }
+
+    &__Line {
+        @include desktop {
+            position: absolute;
+            top: 0.625rem;
+            left: -2.8rem;
+            width: 48px;
+            height: 0;
+            border: 0.5px dashed grey;
+        }
+    }
+}

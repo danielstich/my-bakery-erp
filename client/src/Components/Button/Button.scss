@@ -1,0 +1,55 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Button {
+    @include buttons;
+    @include padding-button;
+    border: none;
+    border-radius: 10px;
+    height: 2rem;
+    background-color: $background-color-3;
+    color: $text-color-2;
+    width: 100%;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $background-color-cta;
+    }
+
+    &--Bottom {
+        margin-bottom: 1rem;
+    }
+
+    &--Login {
+        width: 15rem;
+        border: 1px dashed #333;
+        margin-top: 0.5rem;
+    }
+
+    &--Signup {
+        width: 15rem;
+        border: 1px dashed #333;
+        margin-top: 0.5rem;
+    }
+
+    &--EditItem {
+        width: 15rem;
+    }
+
+    &--Add-Icon {
+        padding: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
+    }
+}

@@ -1,1 +1,7 @@
+@use './Styles/mixins' as *;
+@use './Styles/variables' as *;
 
+.App {
+    position: relative;
+    // margin-top: 2rem;
+}

@@ -1,0 +1,127 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Header {
+    position: relative;
+    z-index: 2;
+    @include tablet {
+        padding-top: 0.25rem;
+    }
+
+    &__Container {
+        @include padding;
+        background-color: $success-color;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        @include tablet {
+            justify-content: flex-start;
+            margin: 0 0.25rem;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+                rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        }
+    }
+
+    &__Icon {
+        height: 2.5rem;
+        cursor: pointer;
+        &--logo {
+            @include tablet {
+                margin-right: 1.5rem;
+            }
+        }
+
+        &--menu {
+            @include tablet {
+                display: none;
+            }
+        }
+    }
+
+    &__Title {
+        @include subtitles;
+        color: $text-color-2;
+        @include tablet {
+            margin-right: auto;
+        }
+
+        // @include tablet {
+        //     &::after {
+        //         content: ' ERP';
+        //     }
+        // }
+    }
+
+    &__Subtitle {
+        @include subtitles;
+        color: $text-color-2;
+        margin: 0;
+        align-self: center;
+        margin-right: 2rem;
+    }
+
+    &__Nav {
+        display: none;
+
+        &--visible {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: $background-color-4;
+            border-bottom: 1px solid grey;
+
+            @include tablet {
+                display: none;
+            }
+        }
+
+        &--tablet {
+            display: none;
+            @include tablet {
+                margin-left: auto;
+                display: flex;
+            }
+        }
+    }
+
+    &__Link {
+        text-decoration: none;
+        color: $text-color-1;
+        padding: 1rem;
+        border-top: 1px solid grey;
+
+        &:active {
+            background-color: $active-state;
+        }
+
+        &--logo {
+            padding: 0;
+            border-top: none;
+            &:active {
+                background-color: transparent;
+            }
+        }
+
+        &--Logout {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        @include tablet {
+            color: $text-color-2;
+            border-top: none;
+
+            &:active {
+                background-color: transparent;
+            }
+
+            &:hover {
+                font-weight: 500;
+            }
+        }
+    }
+}

@@ -1,0 +1,80 @@
+@use './variables' as *;
+
+@mixin titles {
+    color: $text-color-1;
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 2.5rem;
+    margin: 1.5rem 0 1rem 0;
+}
+
+@mixin subtitles {
+    color: $text-color-1;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 2.25rem;
+}
+
+@mixin body {
+    color: $text-color-1;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+@mixin buttons {
+    color: $text-color-2;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.3125rem;
+    letter-spacing: 0.05rem;
+}
+
+@mixin placeholder {
+    color: rgba($color: $text-color-1, $alpha: 0.7);
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.3125rem;
+}
+
+@mixin labels {
+    color: rgba($color: $text-color-1, $alpha: 0.7);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.3125rem;
+}
+
+@mixin spacing-reset {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin padding {
+    padding: 0 1rem;
+}
+
+@mixin padding-input {
+    padding: 0 0.5rem;
+}
+
+@mixin padding-button {
+    padding: 0 0.5rem;
+}
+
+@mixin tablet {
+    @media (min-width: $tablet-size) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: $desktop-size) {
+        @content;
+    }
+}

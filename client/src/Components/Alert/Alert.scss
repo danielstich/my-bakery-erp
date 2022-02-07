@@ -1,0 +1,42 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Alert {
+    position: fixed;
+    bottom: 8rem;
+    left: 0;
+    width: 100vw;
+    z-index: -1;
+    transition: 0.5s linear;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+
+    &__Body {
+        @include body;
+        color: $text-color-2;
+        text-align: center;
+        margin: 0;
+    }
+
+    &--Show {
+        z-index: 3;
+        opacity: 100;
+        transition: 0.5s linear;
+    }
+
+    &__Container {
+        display: flex;
+        flex-direction: column;
+        padding: 0.75rem 3rem;
+        border-radius: 10px;
+
+        &--success {
+            background-color: $success-color-2;
+        }
+
+        &--error {
+            background-color: $error-color;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Landing {
+    margin-top: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__Slides {
+        width: 90%;
+        height: 63.15vh;
+        border: none;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+            rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    }
+}

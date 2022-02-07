@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+### Whisk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Summary
 
-## Available Scripts
+-This app helps small bakery shops manage inventory, recipes, and other activities related to the kitchen. It even includes a ledger to keep track of financial information
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### Recipes
+Users can add/edit/delete recipes in their catalog. They can keep a list of ingredients in each recipe with an amount and unit of measurment. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Inventory
+Users can add/edit/delete inventory they currently have in their kitchen. This will be checked when users attempt to make batches of recipes.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Batches
+Users can make batches based off their recipes' ingredient list and available inventory. If there are short any items, that app will alert them.
 
-### `npm test`
+### Ledger
+Users can add/edit/delete transactions related to their bakery here. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Users
+Each user is unique that signs up and each API call is verified using JWTs.
 
-### `npm run build`
+## Tech Stack and Installation Instructions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Front End
+This app uses React, Sass, and Axios to make the user experience responsive and dynamic. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Install: 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+cd client
+npm install
+npm start
+```
 
-### `npm run eject`
+### Back End
+The server uses Express/Nodejs with Knex/MySql and JWTs for authentication.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Database Setup: (assuming mysql is installed)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+You will first need to install MySQL(https://www.mysql.com/) and configure your knex file(https://knexjs.org/#Installation-client) to point to your database.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Install:
+```
+cd server
+npm install
+npx knex migrate:latest
+npx knex seed:run
+node server
+```

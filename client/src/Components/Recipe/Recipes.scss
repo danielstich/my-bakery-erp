@@ -1,0 +1,117 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Recipes {
+    @include padding;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    @include desktop {
+        flex-direction: row;
+    }
+
+    &__Modal {
+        @include desktop {
+            display: none;
+        }
+    }
+
+    &__Container {
+        width: 100%;
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    &__Header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    &__Title {
+        @include subtitles;
+        margin: 0;
+    }
+
+    &__List {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &__Item {
+        display: none;
+
+        @include desktop {
+            display: block;
+            width: 50%;
+            padding-left: 0.75rem;
+        }
+    }
+
+    &__Add-Icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: $background-color-3;
+        border-radius: 50%;
+        align-self: flex-end;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $background-color-cta;
+        }
+
+        &:active {
+            background-color: $background-color-cta;
+        }
+    }
+}
+
+.Recipe {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px grey dashed;
+    border-radius: 10px;
+    padding: 0.75rem;
+    background-color: $background-color-4;
+    position: relative;
+
+    &:last-child {
+        margin-bottom: 8rem;
+    }
+
+    &__Title {
+        @include body;
+        font-size: 1.0625rem;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    &__Body {
+        font-style: italic;
+        @include body;
+        font-weight: 300;
+        margin: 0;
+
+        &--Qty {
+            display: inline-block;
+            font-weight: 400;
+            align-self: flex-start;
+            margin-left: 1rem;
+        }
+    }
+
+    &__Icon {
+        height: 1.5rem;
+        cursor: pointer;
+        &--edit {
+            margin-left: auto;
+        }
+    }
+}

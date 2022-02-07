@@ -1,0 +1,40 @@
+@use '../../Styles/mixins' as *;
+@use '../../Styles/variables' as *;
+
+.Input {
+    display: flex;
+    flex-direction: column;
+
+    &__Label {
+        @include labels;
+        color: $text-color-1;
+
+        &--Batch {
+            width: 15rem;
+            margin-bottom: -0.5rem;
+        }
+    }
+
+    &__Field {
+        @include body;
+        @include padding-input;
+
+        border: 1px dashed $text-color-1;
+        border-radius: 10px;
+        height: 2rem;
+        width: 15rem;
+
+        &--bottom {
+            margin-bottom: 1rem;
+        }
+
+        &::placeholder {
+            @include placeholder;
+            color: $text-color-1;
+        }
+        &:focus {
+            outline: none;
+            border: 2px solid $background-color-3;
+        }
+    }
+}
